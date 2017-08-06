@@ -33,6 +33,8 @@ class ShiftController extends Controller
             $bills = BillModel::WhatKindBillThisUser();
             $data = $shift->created_at->toDateTimeString();
             $begin_cash = $shift->cash;
+
+            // поиск счета тип - наличные для этого магазина
             $default_bill = StorageModel::UserStorage()->default_bill;
 
             // поиск всех операций магазина к которому принадлежит этот пользователь после начала смены,
@@ -55,12 +57,18 @@ class ShiftController extends Controller
             $all_operations = $spend->merge($operations)->merge($move)->sortByDesc('created_at');
 
             $all_operations = $all_operations->filter(function ($all_operations) {
-                return $all_operations->value > 0 || $all_operations->bill == 1;
+
+                $filter =
+                    $all_operations->value > 0.00 ||
+                    ($all_operations->bill == StorageModel::UserStorage()->default_bill && $all_operations->value != 0);
+
+                return $filter;
+
             });
 
             $all_amount = $all_operations->sum('value') + $begin_cash;
 
-            // сумма отдельных счетов принадлежаащих этому магазину в массиве с ключем в виде  ID счета
+            // сумма отдельных счетов принадлежаащих этому магазину в массиве с ключем в виде ID счета
             foreach ($bills as $bill) {
 
                 if ($bill == $default_bill) {
@@ -70,6 +78,8 @@ class ShiftController extends Controller
                 }
 
             }
+
+
             $sell = SellsModel::where('created_at', '>', $data)->get();
 
             return view('shift.shift')

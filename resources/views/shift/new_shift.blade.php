@@ -18,7 +18,7 @@
             <div class="col-md-12"
                  style="display: flex; justify-content: center; align-items: center; margin-top: 200px;">
                 <form action="{{ route('new_shift') }}" method="post">
-                    <input type="hidden" name="cash" value="{{ $last_shift_cash }}">
+                    <input type="hidden" name="cash" value="{{ $last_shift_cash->last_cash }}">
                     {{ csrf_field() }}
                     <input class="btn btn-lg btn-primary" style="width: 200px; height: 100px;" type="submit"
                            value="Новая смена">

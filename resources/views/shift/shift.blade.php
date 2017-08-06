@@ -55,8 +55,12 @@
             @endforeach
         </div>
 
-
-        <table class="ui selectable celled table">
+        <div class="ui top attached tabular menu">
+            <a class="item active" data-tab="fin_op">Финасовые операции</a>
+            <a class="item" data-tab="sells">Продажи</a>
+        </div>
+        <div class="ui bottom attached active tab segment" data-tab="fin_op">
+            <table class="ui very compact selectable celled table">
             <thead>
             <tr>
                 <th colspan="5">
@@ -86,7 +90,11 @@
                         </td>
                     @else
                         <td class="text-center" style="vertical-align:middle">
-                            {{ $operation->client_id }}
+                            @if($operation->client_cash_model == NULL)
+                                Без клиента
+                            @else
+                                <a href="{{ route('detail_view') }}/{{ $operation->client_id }}">{{ $operation->client_cash_model->name }}</a>
+                            @endif
                         </td>
                         <td>
                             {{ $operation->comments }}
@@ -109,26 +117,37 @@
             @endforeach
             </tbody>
         </table>
-        <table class="ui selectable celled table">
-            <thead>
-            <tr>
-                <th colspan="4">
-                    Продажи
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($sells as $sell)
+
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="sells">
+            <table class="ui very compact selectable celled table">
+                <thead>
                 <tr>
-                    <td><a href="{{ route('sell_detail') }}/{{ $sell->id }}">{{ $sell->id }}</a>
-                    </td>
-                    <td>{{ $sell->client_id }}</td>
-                    <td>{{ $sell->created_at }}</td>
-                    <td>{{ $sell->summa }} p.</td>
+                    <th colspan="4">
+                        Продажи
+                    </th>
                 </tr>
-            @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach($sells as $sell)
+                    <tr>
+                        <td><a href="{{ route('sell_detail') }}/{{ $sell->id }}">{{ $sell->id }}</a>
+                        </td>
+                        @if($sell->client_sell_model == NULL)
+                            <td>Без клиента</td>
+                        @else
+                            <td>
+                                <a href="{{ route('detail_view') }}/{{ $sell->client_id }}">{{ $sell->client_sell_model->name }}</a>
+                            </td>
+                        @endif
+                        <td>{{ $sell->created_at }}</td>
+                        <td>{{ $sell->summa }} p.</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+
     </div>
 @endsection
 
@@ -142,6 +161,7 @@
 
 @section('script')
     <script>
+        $('.menu .item').tab();
         $(".dropdown").dropdown();
     </script>
 @endsection

@@ -74,6 +74,7 @@
 
             </tfoot>
         </table>
+        {{ $sells->links() }}
     </div>
 @endsection
 

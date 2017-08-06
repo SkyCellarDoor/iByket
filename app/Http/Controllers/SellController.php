@@ -188,7 +188,7 @@ class SellController extends Controller
     public function sells_list()
     {
 
-        $sells = SellsModel::where('complete', 1)->get();
+        $sells = SellsModel::where('complete', 1)->paginate(15);
 
         return view('sell.sells_list')->with(['sells' => $sells]);
 
