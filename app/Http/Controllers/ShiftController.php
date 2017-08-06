@@ -99,7 +99,6 @@ class ShiftController extends Controller
     public function newShift(Request $request)
     {
 
-
         $new_shift = new ShiftModel();
         $new_shift->cash = $request->cash;
         $new_shift->status = 0;
