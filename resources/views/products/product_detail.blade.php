@@ -61,7 +61,7 @@
                                        placeholder="Название" value="{{ $product->name }}">
                             </div>
                             <div class="field">
-                                <label>Категория</label>
+                                <label>Категория<a href="#"><i class="plus green icon"></i></a></label>
                                 <select id="category" class="dropdown" name="category">
                                     <option value="">Выберите категорию</option>
                                     @foreach( $categories as $category)
@@ -74,7 +74,7 @@
                                 </select>
                             </div>
                             <div id="div_sub_cat" class="field">
-                                <label>Подкатегория</label>
+                                <label>Подкатегория<a href="#"><i class="plus green icon"></i></a></label>
                                 <select id="sub_category" class="dropdown" name="sub_category">
                                     <option value="">Выберите подкатегорию</option>
                                     @foreach( $sub_categories as $sub_category)
@@ -500,6 +500,7 @@
                             },
                         }
                     });
+
                 if ($("#form_new_promotion").form('is valid')) {
 
                     $("#form_new_promotion").on('submit', function (e) {
@@ -513,8 +514,6 @@
                 return false;
             }
         });
-
-
 
         function render_table() {
 

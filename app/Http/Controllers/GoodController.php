@@ -42,9 +42,9 @@ class GoodController extends Controller
             ->with('good_model',
                 'good_model.main_cat',
                 'good_model.sub_cat',
-            'invoice_model',
-            'storage_box_model',
-            'good_model.one_name_model',
+                'invoice_model',
+                'storage_box_model',
+                'good_model.one_name_model',
                 'good_model.many_name_model')->get()->sortBy('good_id');
 
         //dd($products);
@@ -67,7 +67,6 @@ class GoodController extends Controller
             ->with(['list_products'=>  $list_products])
             ->with('product', $product)
             ->with('product_count', $product_count);
-
     }
 
     public function sub_cat(Request $request) {

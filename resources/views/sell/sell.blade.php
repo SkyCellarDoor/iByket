@@ -129,12 +129,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="field">
-                                                    <select id="list_bills_add" name="add_bill_id"
-                                                            class="ui mini dropdown bill">
+                                                    <select class="ui mini dropdown">
                                                         <option value="">Выберите акцию</option>
-                                                        @foreach($bills as $bill)
-                                                            <option value="{{ $bill->id }}">{{ $bill->name }}</option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="field">
@@ -478,6 +474,19 @@
             },
         });
 
+        var rule = {
+            fields: {
+                bill_id: {
+                    identifier: 'bill_id',
+                    rules: [
+                        {
+                            type: 'minCount[1]',
+                        }
+                    ]
+                },
+            }
+        };
+
         $('#use_bill').checkbox({
 
             onChecked: function () {
@@ -486,6 +495,20 @@
                 $('#add_puy').show('fast');
                 $('#use_bill_input').val('1');
                 $('.dropdown').dropdown('clear');
+
+                var rule = {
+                    fields: {
+                        add_bill_id: {
+                            identifier: 'add_bill_id',
+                            rules: [
+                                {
+                                    type: 'minCount[1]',
+                                }
+                            ]
+                        },
+                    }
+                };
+                console.log(rule);
             },
             onUnchecked: function () {
 
@@ -494,8 +517,20 @@
                 $('#use_bill_input').val('0');
                 $('.dropdown').dropdown('clear');
 
+                var rule = {
+                    fields: {
+                        bill_id: {
+                            identifier: 'bill_id',
+                            rules: [
+                                {
+                                    type: 'minCount[1]',
+                                }
+                            ]
+                        },
+                    }
+                };
+                console.log(rule);
 
-//                $('#consist_status').val('0');
             },
         });
 
@@ -523,9 +558,10 @@
             }
         });
 
+        //        $('#send_data').form(rule, console.log(rule));
+
         $('#complete').on('click', function () {
             if ($('#use_bill_input').val() == 0) {
-
                 $('#send_data').form({
                     fields: {
                         bill_id: {
@@ -540,18 +576,26 @@
                 });
             }
             else {
-//                $('#send_data').form({
-//                    fields: {
-//                        list_bills_add: {
-//                            identifier: 'list_bills_add',
-//                            rules: [
-//                                {
-//                                    type   : 'empty',
-//                                }
-//                            ]
-//                        },
-//                    }
-//                });
+                $('#send_data').form({
+                    fields: {
+                        add_bill_id: {
+                            identifier: 'add_bill_id',
+                            rules: [
+                                {
+                                    type: 'minCount[1]',
+                                }
+                            ]
+                        },
+                        add_puy_to_client: {
+                            identifier: 'add_puy_to_client',
+                            rules: [
+                                {
+                                    type: 'empty',
+                                }
+                            ]
+                        },
+                    }
+                });
             }
         });
 

@@ -1,4 +1,4 @@
-<label>Подкатегория</label>
+<label>Подкатегория<a href="#"><i class="plus green icon"></i></a></label>
 <select id="sub_category" class="selectpicker" name="sub_category" title="Выберите подкатегорию">
         <option value="">Выберите подкатегорию</option>
         @foreach( $sub_cats as $sub_cat )

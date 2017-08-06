@@ -48,7 +48,7 @@
                         @if( $sell->client_id == NULL )
                             Без клиента
                         @else
-                            <a href="{{ route('detail_view') }}/{{ $sell->client_id }}">{{ $sell->client_model->name }}</a>
+                            <a href="{{ route('detail_view') }}/{{ $sell->client_id }}">{{ $sell->client_sell_model->name }}</a>
                         @endif
                     </td>
                     <td>
