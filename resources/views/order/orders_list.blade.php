@@ -27,7 +27,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($orders->take(5) as $order)
+            @foreach($orders as $order)
                 <tr>
                     <td>
                         <a href="{{ route('order_detail') }}/{{ $order->id }}">

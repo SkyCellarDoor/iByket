@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CategoryGoodModel;
+use App\CategorySubGood;
 use App\Goods;
 use App\ProductModel;
 use App\SellsProductsModel;
@@ -14,15 +15,14 @@ class GoodController extends Controller
 
         if($request->ajax()){
 
-            if (!isset($request->sub_category) ){
-                $category = $request->category;
-            }
-            else
-                $category = $request->sub_category;
+            $category = $request->category;
+
+            $sub_category = $request->sub_category;
 
             $id = $request -> id;
             $good = Goods::find($id);
-            $good -> category_good_id = $category;
+            $good->category_id = $category;
+            $good->sub_category_id = $sub_category;
             $good -> name = $request -> name;
             $good -> description = $request -> description;
             $good -> vendor = $request ->vendor;
@@ -37,12 +37,15 @@ class GoodController extends Controller
 
     public function detail_product($id) {
 
-        $list_products = ProductModel::where('good_id', $id)->with(
-            'storage_model',
+        $list_products = ProductModel::where('good_id', $id)
+            ->where('amount', '>', 0)
+            ->with('good_model',
+                'good_model.main_cat',
+                'good_model.sub_cat',
             'invoice_model',
             'storage_box_model',
             'good_model.one_name_model',
-            'good_model.many_name_model')->get()->sortBy('good_id')->take(7);
+                'good_model.many_name_model')->get()->sortBy('good_id');
 
         //dd($products);
 
@@ -50,24 +53,17 @@ class GoodController extends Controller
 
         $sells = SellsProductsModel::whereIN('product_id', $all_product)->get();
 
-        $product = Goods::with('categories_model')->find($id);
+        $product = Goods::with('main_cat', 'sub_cat')->find($id);
 
-        $categories = CategoryGoodModel::where('main', NULL)->get();
+        $main_cat = CategoryGoodModel::all();
+        $sub_cat = CategorySubGood::where('main_category', $product->category_id)->get();
 
-        if ($product->categories_model->main == null){
-            $sub_categories = CategoryGoodModel::where('main', $product->categories_model->id)->get();
-        }
-        else {
-            $sub_categories = CategoryGoodModel::where('main', $product->categories_model->main)->get();
-        }
         $product_count = $list_products->sum('amount');
-
-
 
         return view('products.product_detail')
             ->with(['sells'=> $sells])
-            ->with(['categories'=> $categories])
-            ->with(['sub_categories'=> $sub_categories])
+            ->with(['categories' => $main_cat])
+            ->with(['sub_categories' => $sub_cat])
             ->with(['list_products'=>  $list_products])
             ->with('product', $product)
             ->with('product_count', $product_count);
@@ -75,8 +71,10 @@ class GoodController extends Controller
     }
 
     public function sub_cat(Request $request) {
+
         $search_sub_cat = $request -> category;
-        $sub_cats = CategoryGoodModel::where('main', $search_sub_cat)->get();
+
+        $sub_cats = CategorySubGood::where('main_category', $search_sub_cat)->get();
 
         $result = view('products.sub_cat_good_result')->with(['sub_cats' => $sub_cats])->render();
 

@@ -30,7 +30,7 @@
                 <th style="width: 1%">
                     Скидка
                 </th>
-                <th style="width: 1%">
+                <th style="width: 1%" nowrap>
                     Магазаин
                 </th>
                 <th style="width: 1%">
@@ -61,7 +61,7 @@
                             {{ $sell->discount }}
                         @endif
                     </td>
-                    <td>
+                    <td nowrap>
                         {{ $sell->storage_model->name }}
                     </td>
                     <td>

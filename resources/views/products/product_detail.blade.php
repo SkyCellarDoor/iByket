@@ -54,10 +54,6 @@
                             </div>
                         </div>
 
-                        {{--<div class="ui error message">--}}
-                        {{--<div class="header">Action Forbidden</div>--}}
-                        {{--<p>You can only sign up for an account once with a given e-mail address.</p>--}}
-                        {{--</div>--}}
                         <div class="three fields">
                             <div class="field">
                                 <label>Название</label>
@@ -66,14 +62,11 @@
                             </div>
                             <div class="field">
                                 <label>Категория</label>
-                                <select id="category" class="dropdown" name="category" title="Выберите категорию">
+                                <select id="category" class="dropdown" name="category">
+                                    <option value="">Выберите категорию</option>
                                     @foreach( $categories as $category)
-                                        @if($product->category_good_id == $category->id)
-                                            <option value="{{ $category->id }}"
-                                                    selected>{{ $category->name }}</option>
-                                        @elseif($product->categories_model->main == $category->id)
-                                            <option value="{{ $category->id }}"
-                                                    selected>{{ $category->name }}</option>
+                                        @if( $product->category_id == $category->id)
+                                            <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
                                         @else
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endif
@@ -82,25 +75,17 @@
                             </div>
                             <div id="div_sub_cat" class="field">
                                 <label>Подкатегория</label>
-                                @if( $product->categories_model->main != 0 )
-                                    <select id="sub_category" class="dropdown" name="sub_category"
-                                            title="Выберите подкатегорию">
-                                        @foreach( $sub_categories as $sub_category )
-                                            @if($product->category_good_id == $sub_category->id)
-                                                <option value="{{ $sub_category->id}}"
-                                                        selected>{{ $sub_category->name }}</option>
+                                <select id="sub_category" class="dropdown" name="sub_category">
+                                    <option value="">Выберите подкатегорию</option>
+                                    @foreach( $sub_categories as $sub_category)
+                                        @if( $product->sub_category_id == $sub_category->id)
+                                            <option value="{{ $sub_category->id }}"
+                                                    selected>{{ $sub_category->name }}</option>
                                             @else
                                                 <option value="{{ $sub_category->id }}">{{ $sub_category->name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
-                                @else
-                                    <select id="sub_category" class="dropdown" name="sub_category">
-                                        @foreach( $sub_categories as $sub_category )
-                                            <option value="{{ $sub_category->id }}">{{ $sub_category->name }}</option>
-                                        @endforeach
-                                    </select>
-                                @endif
                             </div>
                         </div>
                         <div class="field">
@@ -149,7 +134,8 @@
                                     <span class="right floated time">{{ $product_count }} {{ $product->one_name_model->name_short }}
                                         .</span></div>
                                 <div class="meta">
-                                    <span class="category">{{ $category->name }}/{{ $sub_category->name }}</span>
+                                    <span class="category">{{ $product->main_cat->name }}
+                                        /{{ $product->sub_cat->name }}</span>
                                 </div>
                             </div>
                         </div>
@@ -200,12 +186,8 @@
                         <thead>
                         <tr>
                             <th style="width: 1%"><input type="checkbox"></th>
-                            <th><a class="ui small teal label">Дата поступления
-                                    <div class="detail">Накладная</div>
-                                </a></th>
-                            <th><a class="ui small teal label">Магазин
-                                    <div class="detail">Склад</div>
-                                </a></th>
+                            <th>Дата поступления / Накладная</th>
+                            <th>Магазин</th>
                             <th>Себестоимость</th>
                             <th><a class="ui small label">Кол-во </a></th>
                         </tr>
@@ -215,10 +197,9 @@
                         @foreach($list_products as $list_product)
                             <tr>
                                 <td><input type="checkbox"></td>
-                                <td><a class="ui small teal label">{{ $list_product->invoice_model->real_date }}
-                                        <div class="detail">{{  $list_product->invoice_model->id }}</div>
-                                    </a></td>
-                                <td><a class="ui small teal label">{{ $list_product }}</a></td>
+                                <td>{{ $list_product->invoice_model->real_date }} /
+                                    <a>{{  $list_product->invoice_model->id }}</a></td>
+                                <td><a class="ui small teal label">{{ $list_product->storage_model->name }}</a></td>
                                 <td>{{ $list_product->cost_end }}</td>
                                 <td>
                                     <a class="ui small label"> {{ $list_product->amount }} {{ $list_product->good_model->one_name_model->name_short }}</a>
@@ -278,9 +259,13 @@
                 <tr>
                     <td><a href="{{ route('sell_detail') }}/{{ $sell->sells_id }}">{{ $sell->sells_id }}</a></td>
                     <td nowrap>{{ $sell->created_at }}</td>
-                    <td>
-                        <a href="{{ route('detail_view') }}/{{ $sell->sells_model->client_id }}">{{ $sell->sells_model->client_model->name }}</a>
-                    </td>
+                    @if ( $sell->sells_model->client_id == NULL )
+                        <td>Без клиента</td>
+                    @else
+                        <td>
+                            <a href="{{ route('detail_view') }}/{{ $sell->sells_model->client_id }}">{{ $sell->sells_model->client_sell_model->name }}</a>
+                        </td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>
@@ -417,7 +402,8 @@
 
         $('#category').on('change', function () {
             var selected = $(this).find("option:selected").val();
-            //alert(selected);
+
+            console.log(selected);
 
             var search_url = $("#hidden_search").val();
 
@@ -431,9 +417,10 @@
 
                 },
                 success: function (response) {
+
                     $('#div_sub_cat').html(response);
                     $('#sub_category').dropdown('refresh');
-                    //console.log(response);
+
                 }
             });
         });
@@ -526,6 +513,7 @@
                 return false;
             }
         });
+
 
 
         function render_table() {
@@ -626,6 +614,8 @@
 
         render_table();
         //конец акций
+
+
 
 
     </script>

@@ -10,15 +10,12 @@ use App\SpendModel;
 use App\StorageModel;
 use Illuminate\Http\Request;
 use App\BillModel;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\ErrorHandler\Collecting;
 
 class ShiftController extends Controller
 {
     public function index()
     {
-
 
         $shift = ShiftModel::OpenShift()->first();
 

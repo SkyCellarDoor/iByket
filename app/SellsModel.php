@@ -8,9 +8,12 @@ class SellsModel extends Model
 {
     protected $table = 'sells';
 
-    public function client_model()
+    public function client_sell_model()
     {
-        return $this->hasOne('App\ClientModel', 'id','client_id');
+        $client = $this->hasOne('App\ClientModel', 'id', 'client_id');
+
+        return $client;
+
     }
 
     public function storage_model()

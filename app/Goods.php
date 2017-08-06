@@ -20,9 +20,14 @@ class Goods extends Model
         return $this->hasOne('App\GoodsConsistNameModel', 'id', 'many_name_id');
     }
 
-    public function categories_model()
+    public function main_cat()
     {
-        return $this->hasOne('App\CategoryGoodModel', 'id', 'category_good_id');
+        return $this->hasOne('App\CategoryGoodModel', 'id', 'category_id');
+    }
+
+    public function sub_cat()
+    {
+        return $this->hasOne('App\CategorySubGood', 'id', 'sub_category_id');
     }
 
     public function one_good_price_all()
