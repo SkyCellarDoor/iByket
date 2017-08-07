@@ -18,6 +18,11 @@ class OrdersModel extends Model
         return $this->hasOne('App\ClientModel', 'id','client_id');
     }
 
+    public function address_model()
+    {
+        return $this->hasOne('App\AddressDeliveryModel', 'id', 'address_delivery_id');
+    }
+
     public function latestStatus()
     {
         return $this->hasMany('App\OrdersStatusHistoryModel', 'order_id','status_id')

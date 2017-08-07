@@ -23,7 +23,9 @@
 
 
 <body style="padding: 10px; background: #e5e5e5;">
-
+{{--@php--}}
+{{--phpinfo();--}}
+{{--@endphp--}}
 
 @if(\Auth::user()->role == 5)
 <div class="ui tiny menu " style="padding: 0px;">

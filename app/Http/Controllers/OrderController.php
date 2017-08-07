@@ -22,10 +22,12 @@ class OrderController extends Controller
     {
 
         $order = OrdersModel::find($id);
+        $client = ClientModel::find($order->client_id);
         $statuses = OrdersStatusHistoryModel::where('order_id', $id)->get()->sortBy('created_at');
 
         return view('order.order_detail')
             ->with(['statuses' => $statuses])
+            ->with('client', $client)
             ->with('order', $order);
     }
 
@@ -63,6 +65,14 @@ class OrderController extends Controller
         $orders = new OrdersModel();
         $orders->client_id = $request->client_id;
         $orders->address_delivery_id = $address_new;
+
+        if ($address_new != NULL) {
+            $orders->type = true;
+        } else {
+
+            $orders->type = false;
+        }
+
         $orders->consist = NULL;
         $orders->summa = NULL;
         $orders->comments = $request->comment;
