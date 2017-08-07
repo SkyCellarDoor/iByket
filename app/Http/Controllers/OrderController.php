@@ -43,16 +43,26 @@ class OrderController extends Controller
 
         //dd($request);
 
-        $address = new AddressDeliveryModel();
-        $address->user = $request->client_id;
-        $address->address = $request->address_delivery;
-        $address->tags = 'Дом';
-        $address->user_id = Auth::id();
-        $address->save();
+
+        if ($request->delivery != 0) {
+            $address = new AddressDeliveryModel();
+            $address->user = $request->client_id;
+            $address->address = $request->address_delivery;
+            $address->tags = 'Дом';
+            $address->user_id = Auth::id();
+            $address->save();
+            $address_new = $address->id;
+
+        } else {
+
+            $address_new = NULL;
+
+        }
+
 
         $orders = new OrdersModel();
         $orders->client_id = $request->client_id;
-        $orders->address_delivery_id = $address->id;
+        $orders->address_delivery_id = $address_new;
         $orders->consist = NULL;
         $orders->summa = NULL;
         $orders->comments = $request->comment;

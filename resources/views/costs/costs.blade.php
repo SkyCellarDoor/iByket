@@ -5,77 +5,71 @@
 @endsection
 
 @section('content')
+
+    <div class="ui top attached menu">
+        <div class="item">&nbsp;Расходы</div>
+        <a id="new_spend" class="item">
+            Новый расход &nbsp; <i class="plus red icon"></i>
+        </a>
+    </div>
+
+    <div class="ui bottom attached segment">
+        <table class="ui very compact celled striped table">
+            <thead>
+            <tr>
+                <th class="text-center">
+                    Дата
+                </th>
+                <th class="text-center">
+                    Категория
+                </th>
+                <th>
+                    Комментарий
+                </th>
+                <th class="text-center">
+                    Счет
+                </th>
+                <th class="text-center">
+                    Сумма
+                </th>
+                <th class="text-center">
+                    Файл
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach($spends as $spend)
+                <tr>
+                    <td class="text-center" style="vertical-align:middle">
+                        {{ $spend->created_at }}
+                    </td>
+                    <td class="text-center" style="vertical-align:middle">
+                        {{ $spend->category}}
+                    </td>
+                    <td>
+                        {{ $spend->comments }}
+                    </td>
+                    <td class="text-center" style="vertical-align:middle">
+                        {{ $spend->bill }}
+                    </td>
+                    <td class="text-center" style="vertical-align:middle;">
+                        <b>{{ $spend->value }} р.</b>
+                    </td>
+                    <td class="text-center" style="vertical-align:middle;">
+                        <a data-toggle="modal" data-id="{{ $spend->id }}" href="#show_file"
+                           onclick="img($(this).data('id'))"><i class="unhide icon"></i></a>
+                    </td>
+                </tr>
+            @endforeach
+
+            </tbody>
+        </table>
+    </div>
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <input type="hidden" name="hidden_search" id="hidden_search" value="{{ route('sub_cat') }}">
-
-    {{--начало заголовка страницы--}}
-    <div class="ui grid">
-        <div class="six wide column">
-            <h3 class="ui left floated header">&nbsp;&nbsp;Расходы</h3>
-        </div>
-        <div class="four wide column right floated">
-            <div class="ui floated two buttons ">
-                <button class="ui teal button">
-                    18.09.2017
-                </button>
-                <button id="new_spend" class="ui red button">
-                    Новый расход
-                </button>
-            </div>
-        </div>
-    </div>
-    <table class="ui celled striped table">
-        <thead>
-        <tr>
-            <th class="text-center">
-                <i class="shopping basket icon"></i> Дата
-            </th>
-            <th class="text-center">
-                Категория
-            </th>
-            <th>
-                Комментарий
-            </th>
-            <th class="text-center">
-                Счет
-            </th>
-            <th class="text-center">
-                Сумма
-            </th>
-            <th class="text-center">
-                Файл
-            </th>
-
-        </tr>
-        </thead>
-        <tbody>
-
-        @foreach($spends as $spend)
-            <tr>
-                <td class="text-center" style="vertical-align:middle">
-                    {{ $spend->created_at }}
-                </td>
-                <td class="text-center" style="vertical-align:middle">
-                    {{ $spend->category}}
-                </td>
-                <td>
-                    {{ $spend->comments }}
-                </td>
-                <td class="text-center" style="vertical-align:middle">
-                    {{ $spend->bill }}
-                </td>
-                <td class="text-center" style="vertical-align:middle;">
-                    <b>{{ $spend->value }} р.</b>
-                </td>
-                <td class="text-center" style="vertical-align:middle;">
-                    <a data-toggle="modal" data-id="{{ $spend->id }}" href="#show_file"
-                       onclick="img($(this).data('id'))"><i class="unhide icon"></i></a>
-                </td>
-            </tr>
-        @endforeach
-
-        </tbody>
-    </table>
 
     {{--модальное окно нового расхода--}}
 
@@ -138,10 +132,10 @@
                 </div>
         </div>
         <div class="actions">
-            <button class="ui black deny button">
+            <a class="ui black deny cancel button">
                 Отмена
-            </button>
-            <button class="ui positive right labeled icon button">
+            </a>
+            <button class="ui positive ok right labeled icon button">
                 Провести
                 <i class="checkmark icon"></i>
             </button>

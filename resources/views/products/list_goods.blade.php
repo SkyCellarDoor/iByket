@@ -44,7 +44,11 @@
                 <tr>
                     <td><input type="checkbox"></td>
                     <td><a href="{{ route('detail_products') }}/{{ $good->id }}">{{ $good->name }}</a></td>
-                    <td>{{ $good->categories_model->name }}</td>
+                    @if ($good->main_cat == NULL)
+                        <td>Без категории</td>
+                    @else
+                        <td>{{ $good->main_cat->name }}</td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>

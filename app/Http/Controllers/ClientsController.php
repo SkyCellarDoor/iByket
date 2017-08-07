@@ -6,23 +6,29 @@ use App\AutoSpendsModel;
 use App\BillModel;
 use App\OrdersModel;
 use App\SellsModel;
+use function foo\func;
 use Illuminate\Http\Request;
 use App\ClientModel;
 use App\CashRoutesModel;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use function PHPSTORM_META\map;
 
 class ClientsController extends Controller
 {
 
     public function create(Request $request){
 
-        //dd($request);
+        $phone = $request->phone;
+
+        $phone = str_replace('-', '', $phone);
+        $phone = str_replace('(', '', $phone);
+        $phone = str_replace(')', '', $phone);
 
         $data = new ClientModel();
         $data -> role = 1;
         $data -> name = $request -> name;
-        $data -> phone = $request ->phone;
+        $data->phone = $phone;
         $data -> bill = 0;
         $data -> save();
 
@@ -55,6 +61,13 @@ class ClientsController extends Controller
         $auto_operation = AutoSpendsModel::where('client_id', $id)->orderBy('created_at', 'desc')->get();
         $all_op = $bills_operation->merge($auto_operation)->sortBy('created_at');
 
+        $phone = $client->phone;
+
+        $phone = "+7(" .
+            substr($phone, 0, 3) . ")" .
+            substr($phone, 3, 3) . "-" .
+            substr($phone, 6, 2) . "-" .
+            substr($phone, 8, 2);
 
         $bills = BillModel::WhatKindBillThisUserCollection();
         $sells = SellsModel::where('client_id', $id)->where('complete', 1)->get();
@@ -65,6 +78,7 @@ class ClientsController extends Controller
         return view('client.client_detail')
             ->with('client', $client)
             ->with('sell_sum', $sell_sum)
+            ->with('phone', $phone)
             ->with(['bills' => $bills])
             ->with(['orders' => $orders])
             ->with(['sells' => $sells])
@@ -110,8 +124,18 @@ class ClientsController extends Controller
 
         $results = ClientModel::Clients()->where('name','like', '%'.$query.'%')
             ->orWhere('phone','like', '%'.$query.'%')
-            ->get()->toJson();
+            ->get();
 
+        $results->map(function ($item) {
+
+            $item['phone'] = "+7(" .
+                substr($item['phone'], 0, 3) . ")" .
+                substr($item['phone'], 3, 3) . "-" .
+                substr($item['phone'], 6, 2) . "-" .
+                substr($item['phone'], 8, 2);
+        });
+
+        $results = $results->toJson();
 
         return "{\"results\":".$results."}";
 

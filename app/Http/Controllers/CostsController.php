@@ -18,6 +18,8 @@ class CostsController extends Controller
     public function index() {
 
         $all_bills = BillModel::all();
+
+
         $cats = CategorySpendModel::where('sub_cat', 0)->get();
 
         //сегодняшня дата с часами и минутами
@@ -54,17 +56,18 @@ class CostsController extends Controller
         $id_file = $spend->id;
 
 
-        $ext = Input::file('spend_doc')->getClientOriginalExtension();
-        $file_name = 'spends_'.$id_file.'.jpg';
+        if (Input::file('spend_doc') != NULL) {
 
-        Image::make(Input::file('spend_doc'))->encode('jpg', 80)->save('img/spends/'. $file_name);
-        //$request -> file('spend_doc') -> storeAs('public/costs/', $file_name);
+            $ext = Input::file('spend_doc')->getClientOriginalExtension();
+            $file_name = 'spends_' . $id_file . '.jpg';
 
-        $file_info = SpendModel::find($id_file);
-        $file_info -> file = $file_name;
-        $file_info -> save();
-        //dd($file_info);
+            Image::make(Input::file('spend_doc'))->encode('jpg', 80)->save('img/spends/' . $file_name);
 
+            $file_info = SpendModel::find($id_file);
+            $file_info->file = $file_name;
+            $file_info->save();
+
+        }
 
         return redirect()->route('costs');
     }

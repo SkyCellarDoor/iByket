@@ -134,8 +134,19 @@
                                     <span class="right floated time">{{ $product_count }} {{ $product->one_name_model->name_short }}
                                         .</span></div>
                                 <div class="meta">
-                                    <span class="category">{{ $product->main_cat->name }}
-                                        /{{ $product->sub_cat->name }}</span>
+                                    <span class="category">
+                                    @if($product->main_cat == NULL)
+                                            Без категории
+                                        @else
+                                            {{ $product->main_cat->name }}
+                                        @endif
+                                        /
+                                        @if($product->sub_cat == NULL)
+                                            Без категории
+                                        @else
+                                            {{ $product->sub_cat->name }}
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                         </div>

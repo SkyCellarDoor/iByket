@@ -20,8 +20,11 @@
             <a class="item" data-tab="second">История</a>
         </div>
         <div class="ui bottom attached tab segment active" data-tab="first">
-
-
+            <div class="ui form">
+                <div class="field">
+                    <textarea><9898/textarea>
+                </div>
+            </div>
         </div>
 
         <div class="ui bottom attached tab segment" data-tab="second">

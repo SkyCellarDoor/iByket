@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BillModel;
 use App\ClientModel;
 use App\ProvidersModel;
 use App\TypeCompanyModel;
@@ -25,10 +26,12 @@ class ProvidersController extends Controller
     public function detail($id)
     {
         $provider = ClientModel::find($id);
+        $bills = BillModel::all();
 
-            //dd($provider);
+        //dd($provider);
 
         return view('providers.provider_detail')
+            ->with('bills', $bills)
             ->with('provider', $provider);
     }
 

@@ -259,8 +259,9 @@
     function new_clients() {
 
         $('.ui.search').search('hide results');
-        console.log($('.prompt').val());
+
         $('#name_client').val($('.prompt').val());
+
         $('.prompt').val('');
 
         $('#phone').mask('(000)-000-00-00', {placeholder: "(000)-000-00-00"});

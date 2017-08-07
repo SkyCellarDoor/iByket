@@ -114,7 +114,7 @@
                                     <div class="summary">
                                         <span class="right floated">
                                           <i class="call square green icon"></i>
-                                         +7 {{ $client->phone }}
+                                            {{ $phone }}
                                         </span>
                                     </div>
                                 </div>
