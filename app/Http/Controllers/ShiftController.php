@@ -40,7 +40,7 @@ class ShiftController extends Controller
             // поиск всех операций магазина к которому принадлежит этот пользователь после начала смены,
             // также выбор только тех счетов, которые принадлежат этому магазину.
 
-            $operations = CashRoutesModel::where('created_at', '>', $data)->whereIn('bill', $bills)->get();
+            $operations = CashRoutesModel::with('bill_model')->where('created_at', '>', $data)->whereIn('bill', $bills)->get();
             $spend = SpendModel::where('created_at', '>', $data)->whereIn('bill', $bills)->get();
             $move = MoveMoneyModel::where('created_at', '>', $data)->whereIn('bill', $bills)->get();
 
@@ -72,9 +72,13 @@ class ShiftController extends Controller
             foreach ($bills as $bill) {
 
                 if ($bill == $default_bill) {
-                    $bill_sum[$bill] = $all_operations->where('bill', $bill)->sum('value') + $begin_cash;
+
+                    $bill_sum[$bill] = number_format(($all_operations->where('bill', $bill)->sum('value') + $begin_cash), 2, '.', ',');
+
                 } else {
-                    $bill_sum[$bill] = $all_operations->where('bill', $bill)->sum('value');
+
+                    $bill_sum[$bill] = number_format($all_operations->where('bill', $bill)->sum('value'), 2, '.', ',');
+
                 }
 
             }
@@ -82,10 +86,13 @@ class ShiftController extends Controller
 
             $sell = SellsModel::where('created_at', '>', $data)->get();
 
+            //dd($all_operations);
+
             return view('shift.shift')
                 ->with(['operations' => $all_operations])
                 ->with(['sells' => $sell])
                 ->with(['bill_sum' => $bill_sum])
+                ->with(['bills' => $bills])
                 ->with('all_amount', $all_amount)
                 ->with('default_bill', $default_bill);
         }

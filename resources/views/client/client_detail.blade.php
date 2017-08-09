@@ -55,7 +55,7 @@
     </div>
     <div id="tabs" class="ui top attached tabular menu">
         <a class="item active " data-tab="main">Основное</a>
-        <a class="item" data-tab="more">Подробности</a>
+        <a class="item" data-tab="more" data-value="more">Подробности</a>
         <a class="item" data-tab="orders">Заказы</a>
         <a class="item" data-tab="sells">Покупки</a>
         <a class="item" data-tab="fin_op">Финансовые операции</a>
@@ -269,7 +269,7 @@
                 <div class="ui grid">
                     <div class="four wide column field">
                         <div class="ui right labeled input ">
-                            <input id='cash_value' name="value" value="" type="text" placeholder="Сумма">
+                            <input id='cash_value' name="value" value="" type="number" placeholder="Сумма">
                             <div class="ui label">
                                 p.
                             </div>
@@ -315,7 +315,10 @@
 
 @section('script')
     <script>
-        $('.menu .item').tab();
+        $('.menu .item').tab({
+            history: true,
+            historyType: 'hash',
+        });
 
         function new_fin(type, value_max) {
 

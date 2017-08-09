@@ -15,6 +15,7 @@
     {{--<link href="{{ asset("semantic/") }}/css/jquery.datetimepicker.min.css" rel="stylesheet" type="text/css"/>--}}
     <link href="{{ asset("semantic/") }}/css/select2.css" rel="stylesheet" type="text/css"/>
     <link href="{{ asset("semantic/") }}/css/daterangepicker.css" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset("semantic/") }}/css/semanticui.min.css" rel="stylesheet" type="text/css"/>
 
 
     <!-- endbower -->
@@ -112,12 +113,6 @@
     </div>
 </div>
 
-
-
-
-
-
-
 @elseif(\Auth::user()->role == 3)
     <div class="ui menu">
         <a class="item" href="{{ route('home') }}">Домой </a>
@@ -213,11 +208,13 @@
 
 <script src="{{ asset("/semantic/") }}/js/jquery-3.2.1.min.js" type="text/javascript"></script>
 <script src="{{ asset("/semantic/") }}/js/semantic.js" type="text/javascript"></script>
-{{--<script src="{{ asset("/semantic/") }}/js/jquery.datetimepicker.full.js" type="text/javascript"></script>--}}
 <script src="{{ asset("/semantic/") }}/js/select2.full.js" type="text/javascript"></script>
 <script src="{{ asset("/semantic/") }}/js/jquery.mask.js" type="text/javascript"></script>
 <script src="{{ asset("/semantic/") }}/js/moment.js" type="text/javascript"></script>
 <script src="{{ asset("/semantic/") }}/js/daterangepicker.js" type="text/javascript"></script>
+<script src="{{ asset("/semantic/") }}/js/jquery.address.js" type="text/javascript"></script>
+<script src="{{ asset("/semantic/") }}/js/dataTables.min.js" type="text/javascript"></script>
+<script src="{{ asset("/semantic/") }}/js/dataTables.semanticui.min.js" type="text/javascript"></script>
 
 
 @yield('page_scripts')

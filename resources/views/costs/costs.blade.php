@@ -84,7 +84,7 @@
                 <div class="ui grid">
                     <div class="five wide column">
                         <div class="ui right labeled input">
-                            <input name="value" type="text" placeholder="Введите сумму">
+                            <input name="value" type="number" placeholder="Введите сумму">
                             <div class="ui basic label">
                                 руб.
                             </div>

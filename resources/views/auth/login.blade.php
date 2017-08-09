@@ -38,7 +38,7 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="user icon"></i>
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}"
+                        <input id="email" class="form-control" name="username" value="{{ old('username') }}"
                                placeholder="Логин" required autofocus>
                     </div>
                 </div>
@@ -50,11 +50,6 @@
                 </div>
                 <input type="submit" class="ui fluid large teal submit button" value="Войти">
             </div>
-
-            <div class="ui message">
-                <a href="{{ route('reg') }}">Зарегистрироваться</a>
-            </div>
-
         </form>
     </div>
 </div>

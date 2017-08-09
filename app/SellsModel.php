@@ -3,10 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Date\Date;
+
 
 class SellsModel extends Model
 {
     protected $table = 'sells';
+
+    //    заменяем Carbon на Jenssegers, для локализации
+
+    protected function asDateTime($value)
+    {
+        return new Date(parent::asDateTime($value));
+    }
 
     public function client_sell_model()
     {

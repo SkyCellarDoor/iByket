@@ -16,14 +16,23 @@
 
 
     <div class="ui bottom attached segment">
-        <table class="ui green selectable celled table">
+
+        <div class="ui top attached tabular menu ">
+            <a class="item active" data-tab="main">Список</a>
+            <a class="item" data-tab="today">Сегодня</a>
+            <a class="item" data-tab="week">Неделя</a>
+        </div>
+        <div class="ui bottom attached tab segment active" data-tab="main">
+
+            <table id="dataTable" class="ui very compact green selectable celled table">
             <thead>
             <tr>
                 <th style="width: 1%">№</th>
-                <th>Дата</th>
-                <th>Описание</th>
                 <th>Клиент</th>
-                <th>Статус</th>
+                <th class="collapsing">Телефон</th>
+                <th>Адрес</th>
+                <th>Дата/Время</th>
+                <th class="collapsing">Статус</th>
             </tr>
             </thead>
             <tbody>
@@ -35,13 +44,24 @@
                         </a>
                     </td>
                     <td>
-                        {{ $order->created_at }}
-                    </td>
-                    <td>
-                        {{$order->comments }}
-                    </td>
-                    <td>
                         <a href="{{ route('detail_view') }}/{{ $order->client_id }}"> {{ $order->client_model->name }}</a>
+                    </td>
+                    <td nowrap>
+                        {{ $order->client_model->phone }}
+                    </td>
+                    <td>
+                        @if( $order->address_model != NULL)
+                            {{ $order->address_model->address }}
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>
+                        @if( $order->time_delivery != NULL)
+                            {{ mb_convert_case(strval(\Jenssegers\Date\Date::parse($order->time_delivery)->format('d F H:i')), MB_CASE_TITLE, "UTF-8") }}
+                        @else
+                            -
+                        @endif
                     </td>
                     <td>
                         {{ $order->status_history_model->status_name_model->name }}
@@ -50,8 +70,108 @@
             @endforeach
             </tbody>
         </table>
-    </div>
-@endsection
+            {{--<table id="dataTable" class="ui celled table" cellspacing="0" width="100%">--}}
+            {{--<thead>--}}
+            {{--<tr>--}}
+            {{--<th>Name</th>--}}
+            {{--<th>Position</th>--}}
+            {{--<th>Office</th>--}}
+            {{--<th>Age</th>--}}
+            {{--<th>Start date</th>--}}
+            {{--<th>Salary</th>--}}
+            {{--</tr>--}}
+            {{--</thead>--}}
+            {{--<tfoot>--}}
+            {{--<tr>--}}
+            {{--<th>Name</th>--}}
+            {{--<th>Position</th>--}}
+            {{--<th>Office</th>--}}
+            {{--<th>Age</th>--}}
+            {{--<th>Start date</th>--}}
+            {{--<th>Salary</th>--}}
+            {{--</tr>--}}
+            {{--</tfoot>--}}
+            {{--<tbody>--}}
+            {{--<tr>--}}
+            {{--<td>Tiger Nixon</td>--}}
+            {{--<td>System Architect</td>--}}
+            {{--<td>Edinburgh</td>--}}
+            {{--<td>61</td>--}}
+            {{--<td>2011/04/25</td>--}}
+            {{--<td>$320,800</td>--}}
+            {{--</tr>--}}
+            {{--</tbody>--}}
+            {{--</table>--}}
+        </div>
+
+        <div class="ui bottom attached tab segment" data-tab="today">
+
+
+            <table class="ui single line table">
+                <thead>
+                <tr>
+                    <th>
+                        {{ $today }}
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($orders_today as $key => $items)
+                    <tr>
+                        <td class="positive">
+                            <b>{{ $key }}:00 @if($this_hour < $key) Ближайшие @endif</b>
+                        </td>
+                        <td class="positive"></td>
+                    </tr>
+                    @foreach($items as $item)
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="{{ route('order_detail') }}/{{ $item->id }}">
+                                    {{ \Carbon\Carbon::parse($item->time_delivery)->format('H:i') }}
+                                </a>
+                                |
+                                @if($item->type == 1)
+                                    Доставка
+                                @else
+                                    Самовывоз
+                                @endif
+                            </td>
+                            <td>{{ $item->client_model->name }}</td>
+                        </tr>
+                    @endforeach
+                @endforeach
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <div class="ui bottom attached tab segment" data-tab="week">
+            <table class="ui single line table">
+                <thead>
+                <tr>
+                    <th>{{ $this_week_start }} - {{ $this_week_end }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td></td>
+                    <td>Если надо, сделаю</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        @endsection
 
 
 @section('page_scripts')
@@ -63,6 +183,25 @@
 
 @section('script')
     <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                "lengthMenu": [[25, 50, -1], [25, 50, "Все"]],
+                "language": {
+                    "lengthMenu": "_MENU_  &nbsp;&nbsp;записей на страницу",
+                    "zeroRecords": "Ничего не найдено",
+                    "info": "Старница _PAGE_ из _PAGES_",
+                    "search": "Поиск:",
+                    "paginate": {
+                        "first": "Начало",
+                        "last": "Конец",
+                        "next": "Вперед",
+                        "previous": "Назад"
+                    },
+                }
+            });
+        });
+
+        $('.menu .item').tab();
 
     </script>
 @endsection

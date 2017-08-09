@@ -86,6 +86,7 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::post('/set_cost', 'SetCostController@set_cost')->name('set_cost');
     Route::post('/set_cost_complete', 'SetCostController@set_cost_complete')->name('set_cost_complete');
 
+
 //API поиска
     Route::get('/search/product/{query?}', 'APIController@product')->name('product_search');
     Route::get('/search/good/{query?}', 'APIController@good')->name('good_search');
@@ -96,6 +97,7 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::get('/order/{id?}', 'OrderController@detail')->name('order_detail');
     Route::get('/order/new/{client?}', 'OrderController@new_order')->name('new_order');
     Route::post('/order/new/', 'OrderController@create_order')->name('create_order');
+    Route::post('/order/update/', 'OrderController@update_order')->name('update_order');
 
 //счета
     Route::get('/bill', 'BillsController@index')->name('bills');
@@ -113,6 +115,12 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::get('/shift', 'ShiftController@index')->name('shift');
     Route::post('/shift/end', 'ShiftController@endShift')->name('end_shift');
     Route::post('/shift/new', 'ShiftController@newShift')->name('new_shift');
+
+// опт
+    Route::get('/opt_clients', 'WholesaleController@opt_clients')->name('opt_clients_list');
+    Route::get('/opt_clients_detail', 'Wholesale@opt_clients_detail')->name('opt_client_detail');
+
+
 
 // роуты для теста
     Route::get('/test', 'TestController@index')->name('test');

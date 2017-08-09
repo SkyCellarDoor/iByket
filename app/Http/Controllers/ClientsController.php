@@ -116,8 +116,7 @@ class ClientsController extends Controller
         $client -> save();
 
 
-
-        return redirect()->action('ClientsController@detail', ['id' => $id]);
+        return redirect()->back();
     }
 
     public function json ($query){

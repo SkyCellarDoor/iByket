@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Test;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -10,12 +11,20 @@ use Illuminate\Support\Facades\Input;
 
 class TestController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        //dump($request);
-        if (isset($_GET['name'])) {
-            echo $_GET['name'];
+        $users = Test::all();
+
+        foreach ($users as $user) {
+
+            $name = Test::find($user->id);
+
+            $name->name = $name->firstname . ' ' . $name->lastname;
+
+            $name->save();
+
         }
+
         return view('test');
     }
 

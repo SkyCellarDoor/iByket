@@ -21,7 +21,6 @@
             </div>
         </div>
 
-
         <div class="ui bottom attached segment">
             <div class="ui grid">
                 <div class="ui twelve wide column">
@@ -54,7 +53,9 @@
                                             <label><span id="delivery_type_text">Время&nbsp;самовывоза</span></label>
                                             <div class="ui input left icon">
                                                 <i class="calendar icon"></i>
-                                                <input name="date_delivery" type="text" placeholder="Время">
+                                                <input id="date" data-datepicker="2017-03-01 22:11" type="text" value=""
+                                                       readonly>
+                                                <input type="hidden" id="form_time" name="date_delivery" value=""/>
                                             </div>
                                         </div>
                                         <div id="address" class="fourteen wide column field" style="display: none;">
@@ -104,7 +105,9 @@
                                     <div class="content">
                                         <div class="summary">
                                         <span class="right floated">
-                                            <a><i class="plus icon"></i></a>
+                                        <a class="item" data-type="0" href="#fin_modal">
+                                            <i class="plus icon green"></i>
+                                        </a>
                                             @if ( $client->bill < 0 )
                                                 <div class="ui red mini horizontal statistic">
                                                     <div class="value">
@@ -206,6 +209,55 @@
     </div>
     </div>
     </div>
+
+
+
+    {{--модальное окно зачисления на счет--}}
+    <div id="fin_modal" class="ui small modal">
+        <i class="close icon"></i>
+        <div class="header">
+            <span id="type_name"></span>
+        </div>
+        <div class="content">
+            <form id="form_move_money" class="ui form" action="{{ route('fin_operation') }}" method="POST">
+                <input id='type_op' name="type_op" type="hidden" value="">
+                <input id='client_id' name="client_id" type="hidden" value="{{ $client->id }}">
+                {{ csrf_field() }}
+                <div class="ui grid">
+                    <div class="four wide column field">
+                        <div class="ui right labeled input ">
+                            <input id='cash_value' name="value" value="" type="text" placeholder="Сумма">
+                            <div class="ui label">
+                                p.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="six wide column ">
+                        <select id="bills" class="dropdown field" name="bill">
+                            <option value="">Способ оплаты</option>
+                            @foreach( $bills as $bill )
+                                <option value="{{ $bill->id }}">{{ $bill->name }}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
+                </div>
+                <div class="sixteen wide column">
+                    <div class="ui form">
+                        <div class="field">
+                            <textarea rows="2" name="comments"
+                                      placeholder="Комментарий">Зачисление аванса за заказ №</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui error message"></div>
+        </div>
+        <div class="actions">
+            <input type="submit" class="ui black deny button" value="Отмена" onclick="event.preventDefault();">
+            <input type="submit" class="ui ok green button">
+            </form>
+        </div>
+    </div>
 @endsection
 
 
@@ -218,18 +270,25 @@
 @section('script')
     <script>
 
+        var start = moment();
+        $('#date').val(start.format('DD MMM'));
+
         $(function () {
-            $('input[name="date_delivery"]').daterangepicker({
-                timePicker: true,
-                timePickerIncrement: 15,
-                timePicker12Hour: false,
-                drops: 'up',
-                format: 'DD-MM-YYYY H:mm',
-                "singleDatePicker": true,
-                locale: {
-                    firstDay: 1,
-                }
-            });
+            $('#date').daterangepicker({
+                    timePicker: true,
+                    timePickerIncrement: 15,
+                    timePicker12Hour: false,
+                    drops: 'up',
+                    format: 'DD MMM H:mm',
+                    singleDatePicker: true,
+                    locale: {
+                        firstDay: 1,
+                    },
+                },
+                function (start, end, label) {
+                    $('#date').val(start.format('DD MMM H:mm'));
+                    $('#form_time').val(start.format('YYYY-MM-DD H:mm'));
+                });
         });
 
         $('a').popup();
@@ -277,6 +336,68 @@
         $('.address').on('click', function () {
             $('#address_delivery').val($(this).text());
         })
+
+
+        function new_fin(type, value_max) {
+
+
+            $("#fin_modal").modal('show');
+
+
+            $("#fin_modal #type_op").val(type);
+
+            if (type < 1) {
+                $("#fin_modal #type_name").text("Зачисление");
+            }
+            else {
+                $("#fin_modal #type_name").text("Списание");
+
+            }
+
+            $("#fin_modal").modal({
+                onApprove: function () {
+                    $("#form_move_money")
+                        .form({
+                            fields: {
+                                value: {
+                                    identifier: 'value',
+                                    rules: [
+                                        {
+                                            type: 'empty',
+                                            prompt: 'Введите сумму'
+                                        }
+                                    ]
+                                },
+                                comment: {
+                                    identifier: 'comments',
+                                    rules: [
+                                        {
+                                            type: 'empty',
+                                            prompt: 'Введите описание'
+                                        }
+                                    ]
+                                },
+                                bill: {
+                                    identifier: 'bills',
+                                    rules: [
+                                        {
+                                            type: 'minCount[1]',
+                                            prompt: 'Выберите счет'
+                                        }
+                                    ]
+                                }
+
+                            }
+                        });
+
+                    if ($("#form_move_money").form('is valid')) {
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+        }
 
     </script>
 @endsection

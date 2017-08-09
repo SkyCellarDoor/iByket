@@ -97,7 +97,8 @@ class InvoiceController extends Controller
 
             $good = new Goods();
             $good->name = $name;
-            $good->category_good_id = 1;
+            $good->category_id = NULL;
+            $good->sub_category_id = NULL;
             $good->description = $request->description;
             $good->consist = $consist;
             $good->one_name_id = $request->one_name_id;
