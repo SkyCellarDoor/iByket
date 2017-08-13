@@ -357,9 +357,10 @@
                 },
                 success: function (response) {
                     $('tbody').append(response);
-
                     count_sum_row();
                     count_sum();
+                    client_change_count();
+
 
                     $('#popup_test')
                         .popup({
@@ -378,9 +379,10 @@
         });
 
         $('body').on('input', '.area_input', function () {
-
             count_sum_row();
             count_sum();
+            client_change_count();
+
 
         });
 
@@ -388,9 +390,10 @@
 
             let id = $(this).data('id');
             $('#tr_' + id).remove();
-
             count_sum_row();
             count_sum();
+            client_change_count();
+
 
         });
 
@@ -412,11 +415,14 @@
             });
             count_sum_row();
             count_sum();
+            client_change_count();
+
         });
 
         function count_sum() {
 
             if ($('.sum').length == 0) {
+
                 $("#all_summ").text('0.00');
                 $("#all_summ_input").val('');
                 $('#complete').attr('disabled', 'disabled');
@@ -430,6 +436,8 @@
                     all_summa += parseFloat($(this).val());
                     $("#all_summ").text(all_summa.toFixed(2));
                     $("#all_summ_input").val(all_summa.toFixed(2));
+
+
                     // сумма доплаты клиента
                     let add_puy = all_summa - $('#client_value_bill').val();
                     if (add_puy >= 0) {
@@ -535,8 +543,12 @@
         });
 
         $('#client_cash').on('input', function () {
+            client_change_count()
+        });
+
+        function client_change_count() {
             let sum_buy = parseFloat($('#all_summ_input').val());
-            let cash = parseFloat($(this).val());
+            let cash = parseFloat($('#client_cash').val());
             let result = 0;
 
             if (cash > sum_buy) {
@@ -545,7 +557,9 @@
 
 
             $('#client_change').text(result.toFixed(2) + ' p.');
-        });
+
+
+        }
 
         $('.bill').dropdown({
             onChange: function (val) {

@@ -13,6 +13,11 @@ class OrdersStatusHistoryModel extends Model
         return $this->hasOne('App\OrdersStatusNameModel', 'id','status_name_id');
     }
 
+    public function status_user_id()
+    {
+        return $this->hasOne('App\ClientModel', 'id', 'user_id');
+    }
+
     public function orders_model()
     {
         return $this->hasOne('App\OrdersModel', 'id','order_id');

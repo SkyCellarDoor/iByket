@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProvidersModel extends Model
 {
-    protected $table = 'providers';
+    protected $table = 'company';
 
     public function type_company_model()
     {

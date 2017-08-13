@@ -6,6 +6,7 @@ use App\CostRetailModel;
 use App\Goods;
 use App\ProductModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class APIController extends Controller
 {
@@ -20,6 +21,7 @@ class APIController extends Controller
 
 
         $results = ProductModel::whereIn('good_id', $good_id)
+            ->where('storage_id', Auth::user()->storage_id)
             ->where(function ($query) {
                 $query->where('amount', '>=', 1)
                       ->orWhere('consist_amount', '>=', 1);

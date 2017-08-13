@@ -10,7 +10,7 @@
 @section('content')
 
     <div class="ui top attached menu">
-        @if ($provider->providers_model->type == 1)
+        @if ($provider->providers_model->type == 2)
             <div class="item">ООО "<b>{{ $provider->providers_model->company }}</b>"</div>
 
         @else
@@ -60,14 +60,37 @@
             <a class="item" data-type="0" href="#fin_modal" onclick="new_fin($(this).attr('data-type'))"> <i
                         class="plus icon green"></i></a>
         </div>
-
-
     </div>
 
 
 
+
+
     <div class="ui bottom attached segment">
-        1
+        <table id="invoice" class="ui compact selectable celled table">
+            <thead>
+            <tr>
+                <th class="collapsing">№</th>
+                <th>Дата прихода товара</th>
+                <th>Дата создания накладной</th>
+                <th class="collapsing">Сумма</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($invoices as $invoice)
+                <tr>
+                    <td>
+                        <a href="{{ route('invoice_detail') }}/{{ $invoice->id }}">{{ $invoice->id }}
+                    </td>
+                    <td nowrap>{{ $invoice->real_date }}</td>
+
+                    <td nowrap>{{ $invoice->created_at }}</td>
+                    <td nowrap>{{ $invoice->summa }} p.</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
     </div>
 
     {{--Модальное окно финасовых операций --}}
@@ -78,10 +101,11 @@
             <span id="type_name"></span>
         </div>
         <div class="content">
-            <form id="form_move_money" class="ui form" action="{{ route('fin_operation') }}" method="POST">
+            <form id="form_move_money" class="ui form" action="{{ route('fin_op_provider') }}" method="POST">
+                {{ csrf_field() }}
+
                 <input id='type_op' name="type_op" type="hidden" value="">
                 <input id='client_id' name="client_id" type="hidden" value="{{ $provider->id }}">
-                {{ csrf_field() }}
                 <div class="ui grid">
                     <div class="four wide column field">
                         <div class="ui right labeled input ">
@@ -117,7 +141,7 @@
         </div>
     </div>
 
-    {{--Модальное окно нововй накладной--}}
+    {{--Модальное окно новой накладной--}}
 
     <div id="add_modal" class="ui small modal">
 

@@ -10,7 +10,7 @@
 @section('content')
 
     <div class="ui top attached menu">
-        <div class="item">&nbsp;Список заказов</div>
+        <div class="item">&nbsp;Список активных заказов</div>
     </div>
 
 
@@ -185,6 +185,7 @@
     <script>
         $(document).ready(function () {
             $('#dataTable').DataTable({
+                "aaSorting": [],
                 "lengthMenu": [[25, 50, -1], [25, 50, "Все"]],
                 "language": {
                     "lengthMenu": "_MENU_  &nbsp;&nbsp;записей на страницу",

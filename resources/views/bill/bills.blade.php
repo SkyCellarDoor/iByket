@@ -33,8 +33,8 @@
             <table class="ui selectable celled table">
                 <thead>
                 <tr>
-                    <th>Принадлежность</th>
                     <th>Название</th>
+                    <th>Принадлежность</th>
                     <th>Описание</th>
                     <th>Сумма</th>
                     <th>Операции</th>
@@ -44,14 +44,14 @@
                 @foreach( $bills as $bill)
                     <tr>
                         <td>
+                            <a href="{{ route('bill_detail') }}/{{ $bill->id }}"> {{ $bill->name }}</a>
+                        </td>
+                        <td>
                             @if( $bill->storage_model->id == 0)
                                 Сервисный счет
                             @else
                                 {{ $bill->storage_model->name }}
                             @endif
-                        </td>
-                        <td>
-                            {{ $bill->name }}
                         </td>
                         <td>
                             {{ $bill->description }}

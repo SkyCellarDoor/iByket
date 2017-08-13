@@ -12,4 +12,14 @@ class SpendModel extends Model
     {
         return $this->hasOne('App\BillModel', 'id', 'bill');
     }
+
+    public function spend_category_model()
+    {
+        return $this->hasOne('App\CategorySpendModel', 'id', 'category');
+    }
+
+    public function spend_subcategory_model()
+    {
+        return $this->hasOne('App\CategorySubSpend', 'id', 'sub_category');
+    }
 }

@@ -22,50 +22,31 @@
                     №
                 </th>
                 <th>
-                    Клиент
+                    Имя
+                </th>
+                <th>
+                    Магазин
                 </th>
                 <th>
                     Сумма
                 </th>
-                <th style="width: 1%">
-                    Скидка
-                </th>
-                <th style="width: 1%" nowrap>
-                    Магазаин
-                </th>
-                <th style="width: 1%">
-                    Сотрудник
-                </th>
             </tr>
             </thead>
             <tbody>
-            @foreach($sells as $sell)
+            @foreach($workers as $worker)
                 <tr>
                     <td>
-                        <a href="{{ route('sell_detail') }}/{{ $sell->id }}">{{ $sell->id }}</a>
+                        <a href="{{ route('worker_detail') }}/{{ $worker->id }}">{{ $worker->id }}</a>
+                    </td>
+
+                    <td>
+                        {{ $worker->name }}
                     </td>
                     <td>
-                        @if( $sell->client_id == NULL )
-                            Без клиента
-                        @else
-                            <a href="{{ route('detail_view') }}/{{ $sell->client_id }}">{{ $sell->client_sell_model->name }}</a>
-                        @endif
-                    </td>
-                    <td>
-                        {{ $sell->summa }} p.
-                    </td>
-                    <td>
-                        @if( $sell->discount == NULL || $sell->discount == 0)
-                            -
-                        @else
-                            {{ $sell->discount }}
-                        @endif
+                        {{ $worker->sell_storage_model->name }}
                     </td>
                     <td nowrap>
-                        {{ $sell->storage_model->name }}
-                    </td>
-                    <td nowrap>
-                        {{ $sell->worker_model->name }}
+                        {{ $worker->bill }}
                     </td>
                 </tr>
             @endforeach

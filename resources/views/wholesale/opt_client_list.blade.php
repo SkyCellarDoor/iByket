@@ -10,30 +10,40 @@
 @section('content')
 
     <div class="ui top attached menu">
-        <div class="item">&nbsp;Поставщики</div>
-        <a class="item" onclick="new_provider()">
+
+
+        <div class="item">&nbsp;Оптовые клиенты</div>
+        <a class="item" onclick="new_opt_client()">
             <i class="plus green icon"></i>
             Добавить
         </a>
+
+        <div class="right menu">
+            <div class="item">
+                <div class="ui transparent icon input">
+                    <input type="text" placeholder="Поиск" autofocus>
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-
-
     <div class="ui bottom attached segment">
-        <table id="providers" class="ui compact selectable celled table">
+        <table class="ui selectable celled table">
             <thead>
             <tr>
-                <th>Название</th>
-                <th class="collapsing">Счет</th>
+                <th>Компания</th>
+                <th>Счет</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($providers as $provider)
+            @foreach($companys as $company)
                 <tr>
                     <td>
-                        <a href="{{ route('detail_provider') }}/{{ $provider->id }}">{{ $provider->providers_model->company }}</a>
+                        <a href="{{ route('opt_client_detail') }}/{{ $company->id }}">{{ $company->wholesales_model->company }}</a>
                     </td>
-                    <td nowrap>{{ $provider->bill }}</td>
+                    <td>{{ $company->bill }}</td>
                 </tr>
             @endforeach
             </tbody>
@@ -41,16 +51,16 @@
     </div>
 
 
-    {{--модальное окно добавления поставщика--}}
+    {{--модальное окно добавления оптовогой компании--}}
 
-    <div id="new_provider" class="ui small modal">
+    <div id="new_opt_client_modal" class="ui small modal">
 
         <i class="close icon"></i>
         <div class="header">
             <span id="type_name">Добавление поставщика</span>
         </div>
         <div class="content">
-            <form id="form_new_provider" class="ui form" action="{{ route('add_provider') }}" method="POST">
+            <form id="new_opt_client_form" class="ui form" action="{{ route('create_opt_client') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="ui grid">
                     <div class="five wide column ">
@@ -78,7 +88,7 @@
         </div>
     </div>
 
-    {{--модальное окно добавления поставщика--}}
+    {{--модальное окно добавления оптовогой компании--}}
 
 
 @endsection
@@ -94,30 +104,13 @@
 @section('script')
     <script>
 
-        $('#providers').DataTable({
-            "aaSorting": [],
-            "lengthMenu": [[25, 50, -1], [25, 50, "Все"]],
-            "language": {
-                "lengthMenu": "_MENU_  &nbsp;&nbsp;записей на страницу",
-                "zeroRecords": "Ничего не найдено",
-                "info": "Старница _PAGE_ из _PAGES_",
-                "search": "Поиск:",
-                "paginate": {
-                    "first": "Начало",
-                    "last": "Конец",
-                    "next": "Вперед",
-                    "previous": "Назад"
-                },
-            }
-        });
+        function new_opt_client() {
 
-        function new_provider() {
+            $("#new_opt_client_modal").modal('show');
 
-            $("#new_provider").modal('show');
-
-            $("#new_provider").modal({
+            $("#new_opt_client_modal").modal({
                 onApprove: function () {
-                    $("#form_new_provider")
+                    $("#new_opt_client_form")
                         .form({
                             fields: {
                                 type: {

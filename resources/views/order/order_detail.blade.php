@@ -12,8 +12,9 @@
         {{ csrf_field() }}
 
         <div class="ui top grey five item inverted  menu">
-            <div class="item">&nbsp;Заказ № {{ $order->id }}</div>
-            <input name="order_id" type="hidden" value="{{ $order->id }}">
+            <div class="item">&nbsp;Заказ № {{ $order->id }}
+                | {{ $order->status_history_model->status_name_model->name }}</div>
+            <input id="order_id" name="order_id" type="hidden" value="{{ $order->id }}">
             <input name="client_id" type="hidden" value="{{ $order->client_id }}">
             <input name="type_order_pay" type="hidden" value="{{ $order->type }}">
             @if ( $order->type == 1)
@@ -28,12 +29,26 @@
                     <div class="item">Оплата:&nbsp;<b>Терминал</b></div>
                 @endif
             @else
-                <div class="item teal">Самовывоз</div>
+                <div class="item teal">Самовывоз c&nbsp;&nbsp;<b>{{ $order->storage_model->name }}</b></div>
                 <div class="item">Время:&nbsp;<b>{{ $time }}</b></div>
             @endif
         </div>
         <div class="top attached ui segment">
-            ?
+            <button class="ui button"
+                    onclick="status(2)" {{ $order->status_history_model->status_name_id >= 2 || $order->status_history_model->status_name_id >= 5 ? "disabled" : "" }}>
+                Собран<i class="angle double right icon"></i></button>
+            <button class="ui button"
+                    onclick="status(3)" {{ $order->status_history_model->status_name_id >= 3 || $order->status_history_model->status_name_id >= 5 ? "disabled" : "" }}>
+                Отправлен<i class="angle double right icon"></i></button>
+            <button class="ui button green"
+                    onclick="status(4)" {{ $order->status_history_model->status_name_id >= 4 || $order->status_history_model->status_name_id >= 5 ? "disabled" : "" }}>
+                Выполнен
+            </button>
+            <button class="ui right floated red button"
+                    onclick="status(5)" {{ $order->status_history_model->status_name_id >= 5 || $order->status_history_model->status_name_id >= 4 ? "disabled" : "" }}>
+                Отменен
+            </button>
+
         </div>
         <div class="bottom attached ui segment">
 
@@ -76,8 +91,8 @@
 
                                                 <div class="ui input left icon">
                                                     <i class="calendar icon"></i>
-                                                    <input id="date" data-datepicker="2017-03-01 22:11" type="text"
-                                                           value="" readonly>
+                                                    <input id="date" type="text" value="" readonly>
+
                                                     <input type="hidden" id="form_time" name="date_delivery"
                                                            value="{{ $order->time_delivery }}"/>
                                                 </div>
@@ -87,6 +102,21 @@
                                                     <label>Адрес доставки</label>
                                                     <input id="address_delivery" type="text" name="address_delivery"
                                                            value="{{ $order -> address_model->address }}">
+                                                </div>
+                                            @else
+                                                <div id="address" class="four wide column field" style="">
+                                                    <label>Магазин самомывывоза</label>
+                                                    <select class="dropdown field" name="storage">
+                                                        <option value="">Выберите магазин</option>
+                                                        @foreach( $storages as $storage )
+                                                            @if ($storage -> id == $order->storage_id)
+                                                                <option value="{{ $storage->id }}"
+                                                                        selected>{{ $storage->name }}</option>
+                                                            @else
+                                                                <option value="{{ $storage->id }}">{{ $storage->name }}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             @endif
 
@@ -199,19 +229,20 @@
                                 </div>
                             </div>
 
-                            <div class="extra content">
-                        <span class="left floated calculator">
-                          <i class="calculator icon"></i>
-                          2023 р.
-                        </span>
-                                <span class="right floated percent">
-                                <span>5</span>
-                                 <i class="percent icon"></i>
-                            </span>
-                            </div>
+                            {{--<div class="extra content">--}}
+                            {{--<span class="left floated calculator">--}}
+                            {{--<i class="calculator icon"></i>--}}
+                            {{--2023 р.--}}
+                            {{--</span>--}}
+                            {{--<span class="right floated percent">--}}
+                            {{--<span>5</span>--}}
+                            {{--<i class="percent icon"></i>--}}
+                            {{--</span>--}}
+                            {{--</div>--}}
                             <div class="extra content">
                                 <div class="field">
-                                    <input class="ui button green right floated" type="submit" value="Сохранить">
+                                    <input class="ui button green right floated" type="submit"
+                                           value="Сохранить" {{ $order->status_history_model->status_name_id >= 5 || $order->status_history_model->status_name_id >= 4 ? "disabled" : "" }}>
                                 </div>
     </form>
                         </div>
@@ -233,7 +264,7 @@
                     <tr>
                         <td>{{ $status->created_at }}</td>
                         <td>{{ $status->status_name_model->name }}</td>
-                        <td>{{ $status->user_id }}</td>
+                        <td>{{ $status->status_user_id->name }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -300,6 +331,28 @@
 
 @section('script')
     <script>
+
+        function status(status) {
+
+            let id = $('#order_id').val();
+
+            $.ajax({
+                url: "{{ route('change_status') }}",
+                type: 'POST',
+                data: {
+                    id: id,
+                    status: status,
+
+                },
+
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+
+                },
+            });
+        }
         $('.menu .item').tab();
 
         var start = moment($('#form_time').val());

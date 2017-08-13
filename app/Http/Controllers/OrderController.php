@@ -7,6 +7,7 @@ use App\BillModel;
 use App\ClientModel;
 use App\OrdersModel;
 use App\OrdersStatusHistoryModel;
+use App\StorageModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,14 +17,16 @@ class OrderController extends Controller
 {
     public function index() {
 
-        $orders = OrdersModel::all();
+        $orders = OrdersModel::where('storage_id', Auth::user()->storage_id)->where('complete', 0)->get();
 
         $this_week_start = new Carbon('this week');
         $this_week_end = new Carbon('next sunday');
         $today = Carbon::today()->format('Y-m-d');
         $this_hour = Carbon::today()->subHour(1)->format('H');
 
-        $orders_today = OrdersModel::where('time_delivery', 'like', $today . '%')->get()->sortByDesc('time_delivery');
+        $orders_today = OrdersModel::where('storage_id', Auth::user()->storage_id)
+            ->where('time_delivery', 'like', $today . '%')
+            ->get()->sortByDesc('time_delivery');
 
         $orders_today = $orders_today->map(function ($items) {
 
@@ -57,6 +60,29 @@ class OrderController extends Controller
 
     }
 
+    public function index_all($sort_date = NULL)
+    {
+
+        if ($sort_date == NULL) {
+
+            $sort_date_1 = new Carbon('first day of this month');
+            $sort_date_2 = new Carbon('now');
+
+            $sort_date = $sort_date_1->format('Y-m-d') . " | " . $sort_date_2->format('Y-m-d');
+
+        }
+
+        $sort_date = explode(' | ', $sort_date);
+
+        if ($sort_date[0] == $sort_date[1]) {
+            $sort_date[1] = $sort_date[1] . ' 23:59:59';
+        }
+
+        $orders = OrdersModel::whereBetween('created_at', [$sort_date[0], $sort_date[1]])->get();
+
+        return view('order.orders_list_all')->with(['orders' => $orders]);
+    }
+
     public function detail($id)
     {
 
@@ -66,6 +92,8 @@ class OrderController extends Controller
         $client = ClientModel::find($order->client_id);
         $statuses = OrdersStatusHistoryModel::where('order_id', $id)->get()->sortBy('created_at');
         $bills = BillModel::WhatKindBillThisUserCollection();
+        $storages = StorageModel::where('point_sell', 1)->get();
+
 
         $time = $order->time_delivery;
         $time = Date::parse($time)->format('d F H:i');
@@ -73,6 +101,7 @@ class OrderController extends Controller
 
         return view('order.order_detail')
             ->with(['statuses' => $statuses])
+            ->with(['storages' => $storages])
             ->with('client', $client)
             ->with('bills', $bills)
             ->with('time', $time)
@@ -83,17 +112,24 @@ class OrderController extends Controller
     {
 
         $client_data = ClientModel::find($client);
+        $orders = OrdersModel::where('client_id', $client_data->id)->get();
+        $storages = StorageModel::where('point_sell', 1)->get();
 
         $bills = BillModel::WhatKindBillThisUserCollection();
 
 
+        //dd($orders);
+
         return view('order.order')
             ->with('bills', $bills)
+            ->with(['orders' => $orders])
+            ->with(['storages' => $storages])
             ->with('client', $client_data);
     }
 
     public function create_order(Request $request)
     {
+
 
 
         //dd($request);
@@ -135,7 +171,7 @@ class OrderController extends Controller
         $orders->comment_courier = trim($request->comment_courier);
         $orders->status_id = NULL;
         $orders->user_id = Auth::id();
-        $orders->storage_id = Auth::user()->storage_id;
+        $orders->storage_id = $request->storage;
         $orders->save();
 
         $status = new OrdersStatusHistoryModel();
@@ -149,11 +185,19 @@ class OrderController extends Controller
         $status_update->status_id = $status->id;
         $status_update->save();
 
-        return redirect()->route('order');
+        return redirect()->route('orders_list');
     }
 
     public function update_order(Request $request)
     {
+
+        $update_status = new OrdersStatusHistoryModel();
+        $update_status->order_id = $request->order_id;
+        $update_status->status_name_id = 6;
+        $update_status->user_id = Auth::id();
+        $update_status->storage_id = Auth::user()->storage_id;
+        $update_status->save();
+
 
         $order = OrdersModel::find($request->order_id);
 
@@ -162,6 +206,7 @@ class OrderController extends Controller
             $order->summa = NULL;
             $order->comments = trim($request->comment);
             $order->time_delivery = $request->date_delivery;
+            $order->storage_id = $request->storage;;
             $order->save();
         } else {
 
@@ -208,6 +253,33 @@ class OrderController extends Controller
 
 
         return redirect()->back();
+    }
+
+    public function change_status(Request $request)
+    {
+
+        $id = $request->id;
+        $status = $request->status;
+
+        $status_new = new OrdersStatusHistoryModel();
+        $status_new->order_id = $id;
+        $status_new->status_name_id = $status;
+        $status_new->user_id = Auth::id();
+        $status_new->storage_id = Auth::user()->storage_id;
+        $status_new->save();
+
+
+        $order = OrdersModel::find($id);
+        $order->status_id = $status_new->id;
+
+        if ($status == 4 || $status == 5) {
+
+            $order->complete = 1;
+
+        }
+        $order->save();
+
+
     }
 
 

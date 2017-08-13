@@ -21,10 +21,16 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/logout', 'HomeController@logout')->name('logout');
+    Route::get('/change_storage', 'HomeController@change_storage')->name('change_storage');
+    Route::post('/update_storage', 'HomeController@update_storage')->name('update_storage');
 
 // просмотр накладных
     Route::get('/invoice/', 'InvoiceController@invoice_list')->name('invoice_list');
     Route::get('/invoice/{id?}', 'InvoiceController@detail')->name('invoice_detail');
+
+// сотрудники
+    Route::get('/worker/', 'WorkerController@worker_list')->name('worker_list');
+    Route::get('/worker_detail/{id?}', 'WorkerController@worker_detail')->name('worker_detail');
 
 // добавление товара
     Route::post('/invoice_create', 'InvoiceController@create')->name('invoice_create');
@@ -45,6 +51,7 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::get('/provider/', 'ProvidersController@index')->name('list_providers');
     Route::get('/provider/{id?}', 'ProvidersController@detail')->name('detail_provider');
     Route::post('/provider/add', 'ProvidersController@add')->name('add_provider');
+    Route::post('/provider/fin', 'ProvidersController@fin')->name('fin_op_provider');
 
 //клиенты
     Route::get('/clients', 'ClientsController@index')->name('clients');
@@ -72,7 +79,7 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::get('/full_report', 'ReportController@index')->name('full_report');
 
 //продукты
-    Route::get('/products', 'ProductsController@index')->name('list_products');
+    Route::get('/products/{storage?}', 'ProductsController@index')->name('list_products');
     Route::post('/products', 'ProductsController@index')->name('list_products');
     Route::get('/good/{id?}', 'GoodController@detail_product')->name('detail_products');
     Route::post('/good/update', 'GoodController@update')->name('update_good');
@@ -93,14 +100,17 @@ Route::group(['middleware' => 'authcheck'], function () {
 
 
 //заказы
-    Route::get('/orders', 'OrderController@index')->name('order');
+    Route::get('/orders', 'OrderController@index')->name('orders_list');
+    Route::get('/orders_all/{sort_date?}', 'OrderController@index_all')->name('orders_list_all');
     Route::get('/order/{id?}', 'OrderController@detail')->name('order_detail');
     Route::get('/order/new/{client?}', 'OrderController@new_order')->name('new_order');
     Route::post('/order/new/', 'OrderController@create_order')->name('create_order');
     Route::post('/order/update/', 'OrderController@update_order')->name('update_order');
+    Route::post('/order/change_status/', 'OrderController@change_status')->name('change_status');
 
 //счета
     Route::get('/bill', 'BillsController@index')->name('bills');
+    Route::get('/bill_detail/{id?}/{filter?}', 'BillsController@detail')->name('bill_detail');
     Route::post('/bill', 'BillsController@move_cash')->name('cash_operation_bill');
 
 //финансовые операции
@@ -108,8 +118,10 @@ Route::group(['middleware' => 'authcheck'], function () {
 
 //Расходы
     Route::get('/costs', 'CostsController@index')->name('costs');
+    Route::get('/create_spends', 'CostsController@create_spends')->name('create_spends');
     Route::post('/costs', 'CostsController@new_cost')->name('new_cost');
-    Route::post('/sub_cat', 'CostsController@sub_cat')->name('sub_cat');
+    Route::post('/sub_cat_spends', 'CostsController@sub_cat_spends')->name('sub_cat_spends');
+    Route::post('/spends/count_max', 'CostsController@count_max')->name('count_max_bill_spends');
 
 //Смена
     Route::get('/shift', 'ShiftController@index')->name('shift');
@@ -118,8 +130,12 @@ Route::group(['middleware' => 'authcheck'], function () {
 
 // опт
     Route::get('/opt_clients', 'WholesaleController@opt_clients')->name('opt_clients_list');
-    Route::get('/opt_clients_detail', 'Wholesale@opt_clients_detail')->name('opt_client_detail');
+    Route::get('/opt_clients_detail/{id?}', 'WholesaleController@opt_clients_detail')->name('opt_client_detail');
+    Route::post('/create_opt_client', 'WholesaleController@create_opt_client')->name('create_opt_client');
 
+// адреса и контакты
+    Route::post('/add_address', 'WholesaleController@add_address')->name('add_address');
+    Route::post('/add_contact', 'WholesaleController@add_contact')->name('add_contact');
 
 
 // роуты для теста

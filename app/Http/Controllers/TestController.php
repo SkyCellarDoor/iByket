@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\ClientModel;
 use App\Test;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -13,19 +15,32 @@ class TestController extends Controller
 {
     public function index()
     {
-        $users = Test::all();
+        $users = User::all();
 
-        foreach ($users as $user) {
+//        foreach ($users as $user) {
+//
+//            $name = Test::find($user->id);
+//
+//            $phone = $name->phone ;
+//
+//        }
 
-            $name = Test::find($user->id);
+//        foreach ($users as $user){
+//
+//            $usert = ClientModel::find($user->id);
+//            $phone = $usert->phone;
+//            $phone = str_replace('-','', $phone);
+//            $phone = str_replace(')','', $phone);
+//            $phone = str_replace('(','', $phone);
+//            $phone = str_replace(' ','', $phone);
+//            $phone = str_replace('+','', $phone);
+//            $phone = mb_substr( $phone, 1);
+//            $usert->phone = $phone;
+//            $usert -> save();
+//
+//        }
 
-            $name->name = $name->firstname . ' ' . $name->lastname;
-
-            $name->save();
-
-        }
-
-        return view('test');
+        return view('test')->with(['users' => $users]);
     }
 
     public function add(Request $request)

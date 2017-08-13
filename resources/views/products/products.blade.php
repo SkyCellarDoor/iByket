@@ -20,6 +20,8 @@
 
     <div class="ui top attached menu">
         <div class="item">&nbsp;Товары</div>
+        <a class="item" href="{{ route('list_products') }}/{{ Auth::user()->storage_id }}">Мой склад</a>
+        <a class="item" href="{{ route('list_products') }}">&nbsp;Все склады</a>
         {{--<div class="ui slider checkbox item right">--}}
         {{--<input type="checkbox" tabindex="0" class="hidden">--}}
         {{--<label>Только мой склад</label>--}}

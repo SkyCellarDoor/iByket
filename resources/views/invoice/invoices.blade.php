@@ -15,32 +15,28 @@
             <i class="plus green icon"></i>
             Принять товар
         </a>
-        <div class="item right" style="width: 230px;">
-            <div class="ui small input">
-                <input id="filter_date" type="text" value=""/>
-            </div>
-        </div>
     </div>
 
     <div class="ui bottom attached segment">
-        <table class="ui small compact selectable celled table">
+        <table id="table_invoices" class="ui compact selectable celled table">
             <thead>
             <tr>
-                <th style="width: 1%;">№</th>
-                <th>Дата поступления</th>
+                <th class="collapsing">№</th>
                 <th>Поставщик</th>
-                <th>Сумма</th>
+                <th class="collapsing">Дата поступления</th>
+                <th class="collapsing">Сумма</th>
             </tr>
             </thead>
             <tbody>
             @foreach($invoice_list as $item)
                 <tr>
                     <td><a href="{{ route('invoice_detail') }}/{{ $item->id }}">{{ $item->id }}</a></td>
-                    <td>{{ substr($item->created_at, 0, 10) }}</td>
                     <td>
                         <a href="{{ route('detail_provider') }}/{{ $item->provider_id }}">{{ \App\ClientModel::find($item->provider_id)->providers_model->company }}</a>
                     </td>
-                    <td>{{ $item->summa }} p.</td>
+                    <td>{{ substr($item->created_at, 0, 10) }}</td>
+
+                    <td nowrap>{{ $item->summa }} p.</td>
                 </tr>
             @endforeach
             </tbody>
@@ -99,10 +95,25 @@
 
 
 @section('script')
-
-
-
     <script type="text/javascript">
+
+        $('#table_invoices').DataTable({
+            "aaSorting": [],
+            "lengthMenu": [[25, 50, -1], [25, 50, "Все"]],
+            "language": {
+                "lengthMenu": "_MENU_  &nbsp;&nbsp;записей на страницу",
+                "zeroRecords": "Ничего не найдено",
+                "info": "Старница _PAGE_ из _PAGES_",
+                "search": "Поиск:",
+                "paginate": {
+                    "first": "Начало",
+                    "last": "Конец",
+                    "next": "Вперед",
+                    "previous": "Назад"
+                },
+            }
+        });
+
         $('#add').on('click', function () {
 
             $('#add_modal').modal('show');
@@ -114,20 +125,6 @@
                 });
             });
 
-        });
-        $(function () {
-            $('#filter_date').daterangepicker({
-                opens: "left",
-                drops: "down",
-                format: 'YYYY-MM-DD',
-                ranges: {
-                    'Сегодня': [moment(), moment()],
-                    'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Последние 7 дней': [moment().subtract(6, 'days'), moment()],
-                    'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
-                    'Предыдущий месяц': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                }
-            });
         });
 
 

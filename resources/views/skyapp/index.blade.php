@@ -32,7 +32,14 @@
 <div class="ui tiny menu " style="padding: 0px;">
     <a class="item" href="{{ route('home') }}">Домой </a>
     <a class="item" href="{{ route('shift') }}">Смена </a>
-    <a class="item" href="{{ route('order') }}">Заказы</a>
+    <div class="menu">
+        <div class="ui dropdown item">Заказы<i class="dropdown icon"></i>
+            <div class="menu">
+                <a class="item" href="{{ route('orders_list') }}">Активные заказы</a>
+                <a class="item" href="{{ route('orders_list_all') }}">Все заказы</a>
+            </div>
+        </div>
+    </div>
     <div class="menu">
         <div class="ui dropdown item">Продажи<i class="dropdown icon"></i>
             <div class="menu">
@@ -57,7 +64,8 @@
                     <i class="dropdown icon"></i>
                     <span class="text">Товары</span>
                     <div class="right menu">
-                        <a class="item" href="{{ route('list_products') }}">Склад товара</a>
+                        <a class="item" href="{{ route('list_products') }}/{{ Auth::user()->storage_id }}">Склад
+                            товара</a>
                         <a class="item" href="{{ route('list_goods') }}">Наименования</a>
                         <a class="item" href="{{ route('move_products_list') }}">Перемещения</a>
                         <a class="item" href="{{ route('income_move_product') }}">Входящие перемещения</a>
@@ -74,8 +82,24 @@
             </div>
         </div>
     </div>
+    <div class="menu">
+        <div class="ui dropdown item">Опт<i class="dropdown icon"></i>
+            <div class="menu">
+                <a class="item" href="{{ route('opt_clients_list') }}">Оптовые клиенты</a>
+
+                <div class="item">
+                    <i class="dropdown icon"></i>
+                    <span class="text">?</span>
+                    <div class="right menu">
+                        <a class="item">??</a>
+                    </div>
+                </div>
+                <a class="item" href="">???</a>
+            </div>
+        </div>
+    </div>
     <div class="left menu">
-        <div class="ui dropdown item">Аналитика<i class="dropdown icon"></i>
+        <div class="ui dropdown item">Система<i class="dropdown icon"></i>
             <div class="menu">
                 <div class="item">
                     <i class="dropdown icon"></i>
@@ -84,10 +108,11 @@
                         <a class="item" href="{{ route('promise_client') }}">Должники</a>
                     </div>
                 </div>
-                <a class="item" href="">Финансы</a>
+                <a class="item" href="{{ route('worker_list') }}">Сотрудники</a>
             </div>
         </div>
     </div>
+
 
     <div class="right menu">
         <a class="item" style="padding: 7px">
@@ -99,8 +124,8 @@
                 <div class="results"></div>
             </div>
         </a>
-        <a class="ui item">
-            Сообщения
+        <a class="ui item" onclick="new_clients()">
+            <i class="plus green icon"></i>
         </a>
         <div class="ui dropdown item">{{ \Auth::user()->name }}<i class="dropdown icon"></i>
             <div class="menu">
@@ -125,8 +150,15 @@
                 </div>
             </div>
         </div>
-        <a class="item" href="{{ route('order') }}">Заказы</a>
 
+        <div class="menu">
+            <div class="ui dropdown item">Заказы<i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item" href="{{ route('orders_list') }}">Активные заказы</a>
+                    <a class="item" href="{{ route('orders_list_all') }}">Все заказы</a>
+                </div>
+            </div>
+        </div>
         <div class="menu">
             <div class="ui dropdown item">Склад<i class="dropdown icon"></i>
                 <div class="menu">
@@ -134,13 +166,15 @@
                         <i class="dropdown icon"></i>
                         <span class="text">Товары</span>
                         <div class="right menu">
-                            <a class="item" href="{{ route('list_products') }}">Склад товара</a>
+                            <a class="item" href="{{ route('list_products') }}/{{ Auth::user()->storage_id }}">Склад
+                                товара</a>
                             <a class="item" href="{{ route('list_goods') }}">Наименования</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <div class="right menu">
             <a class="item" style="padding: 7px">
@@ -152,12 +186,14 @@
                     <div class="results"></div>
                 </div>
             </a>
-            <a class="item">Сообщения </a>
+            <a class="ui item" onclick="new_clients()">
+                <i class="plus green icon"></i>
+            </a>
             <div class="ui dropdown item">{{ \Auth::user()->name }}<i class="dropdown icon"></i> <div class="menu">
                     <a class="item">Аккаунт</a>
                     <a class="item">Настройки</a>
                     <div class="divider"></div>
-                    <a class="item">Выход</a>
+                    <a href="{{ route('logout') }}" class="item">Выход</a>
                 </div>
             </div>
         </div>

@@ -6,6 +6,7 @@ use App\BillModel;
 use App\CashRoutesModel;
 use App\MoveMoneyModel;
 use App\SpendModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -82,6 +83,46 @@ class BillsController extends Controller
         $data_spend -> save();
 
         return redirect()->route('bills');
+    }
+
+    public function detail($id, $sort_date = NULL)
+    {
+
+        if ($sort_date == NULL) {
+
+            $sort_date_1 = new Carbon('first day of this year');
+            $sort_date_2 = new Carbon('now');
+
+            $sort_date = $sort_date_1->format('Y-m-d') . " | " . $sort_date_2->format('Y-m-d');
+
+        }
+
+        $sort_date = explode(' | ', $sort_date);
+
+//        if ( $sort_date[0] == $sort_date[1] ) {
+//            $sort_date[1] = $sort_date[1].' 23:59:59';
+//        }
+
+        $bill = BillModel::find($id);
+
+        $operation = CashRoutesModel::whereBetween('created_at', [$sort_date[0], $sort_date[1] . ' 23:59:59'])->where('bill', $id)->get();
+        $spend = SpendModel::whereBetween('created_at', [$sort_date[0], $sort_date[1] . ' 23:59:59'])->where('bill', $id)->get();
+        $move = MoveMoneyModel::whereBetween('created_at', [$sort_date[0], $sort_date[1] . ' 23:59:59'])->where('bill', $id)->get();
+
+
+        $all = new Collection();
+
+        $all = $all->merge($move)->merge($spend)->merge($operation);
+
+        $all = $all->filter(function ($value, $key) {
+            return $value['value'] != 0;
+        });
+
+        //dd($all);
+
+        return view('bill.bill_detail')
+            ->with('bill', $bill)
+            ->with(['operations' => $all]);
     }
 
 

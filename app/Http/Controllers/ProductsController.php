@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
-    public function index(Request $request){
+    public function index($storage = NULL)
+    {
 
         // жадная загрузка отношений
         $products = ProductModel::with(
@@ -22,19 +23,13 @@ class ProductsController extends Controller
             'invoice_model',
             'storage_box_model',
             'good_model.one_name_model',
-            'good_model.many_name_model')->where('amount','>', 0)->get()->sortBy('good_id');
+            'good_model.many_name_model')
+            ->where('amount', '>', 0)
+            ->get()->sortBy('good_id');
 
-        if ($request->ajax()){
-
-            if ($request -> mystorage == 1) {
-                $products = $products->where('storage_id', Auth::user()->storage_id);
-            }
-
-            $result = view('products.result_table')->with(['products' => $products])->render();
-            return $result;
-
+        if ($storage != NULL) {
+            $products = $products->where('storage_id', $storage);
         }
-
 
         return view('products.products')->with(['products' => $products]);
     }
@@ -143,6 +138,7 @@ class ProductsController extends Controller
         return view('products.move_income')
             ->with(['items' => $items])
             ->with(['back_product' => $back_product]);
+
     }
 
     public function income_move_detail ($id) {
@@ -251,6 +247,6 @@ class ProductsController extends Controller
         $complete -> save();
 
 
-        //return redirect()->route('move_products_list');
+        return redirect()->route('income_move_product');
     }
 }

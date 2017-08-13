@@ -209,7 +209,8 @@
                             <tr>
                                 <td><input type="checkbox"></td>
                                 <td>{{ $list_product->invoice_model->real_date }} /
-                                    <a>{{  $list_product->invoice_model->id }}</a></td>
+                                    <a href="{{ route('invoice_detail') }}/{{$list_product->invoice_model->id}}">{{  $list_product->invoice_model->id }}</a>
+                                </td>
                                 <td><a class="ui small teal label">{{ $list_product->storage_model->name }}</a></td>
                                 <td>{{ $list_product->cost_end }}</td>
                                 <td>

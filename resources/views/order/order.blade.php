@@ -19,6 +19,19 @@
                     <input id="delivery_status" type="hidden" name="delivery" value="0">
                 </div>
             </div>
+            <div class="right item" style="padding: 3px">
+                &nbsp;&nbsp;&nbsp;Самовывоз с &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select class="dropdown field" name="storage">
+                    <option value="">Выберите магазин</option>
+                    @foreach( $storages as $storage )
+                        @if ($storage->id == \Illuminate\Support\Facades\Auth::user()->storage_id)
+                            <option value="{{ $storage->id }}" selected>{{ $storage->name }}</option>
+                        @else
+                            <option value="{{ $storage->id }}">{{ $storage->name }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
         </div>
 
         <div class="ui bottom attached segment">
@@ -150,54 +163,44 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="event">
-                                    <div class="content">
-                                        <div class="summary">
-                                            <span class="right floated">
-                                              <i class="calendar blue icon"></i>
-                                             10.09.2017
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                        <div class="content">
-                            <div class="ui small feed">
-                                <div class="event">
-                                    <div class="content">
-                                        <div class="extra text">
-                                            <a class="ui icon" data-position="right center">
-                                                Заказ №21
-                                            </a>
-                                            <div class="ui fluid popup">
-                                                <div class="ui two column grid">
-                                                    <div class="column">
-                                                        <h4 class="ui header">Заказ №21</h4>
-                                                        <div class="ui link list">
-                                                            <a class="item">Cashmere</a>
-                                                            <a class="item">Linen</a>
-                                                            <a class="item">Cotton</a>
-                                                            <a class="item">Viscose</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            на адрес: <a><span class="address">ул. Тельмана д.47б - 8</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {{--@if (count($orders) > 0)--}}
+                        {{--<div class="content">--}}
+                        {{--@foreach($orders as $order)--}}
+                        {{--<div class="ui small feed">--}}
+                        {{--<div class="event">--}}
+                        {{--<div class="content">--}}
+                        {{--<div class="extra text">--}}
+                        {{--<a class="ui icon" data-position="left center">--}}
+                        {{--{{ $order->id }}--}}
+                        {{--</a>--}}
+                        {{--<div class="ui fluid popup">--}}
+                        {{--<div class="ui two column grid">--}}
+                        {{--<div class="column">--}}
+                        {{--<h4 class="ui header">Заказ {{ $order->id }}</h4>--}}
+                        {{--<div class="ui link list">--}}
+                        {{--<span>{{ $order->comments }}</span>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--на адрес: {{ $order->address_model->address }}<a><span class="address">{{ $order->address_model->address }}</span></a>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--@endforeach--}}
+                        {{--</div>--}}
+                        {{--@endif--}}
                         <div class="extra content">
                         <span class="left floated calculator">
                           <i class="calculator icon"></i>
-                          2023 р.
                         </span>
-                            <span class="right floated percent">
-                                <span>5</span>
-                                 <i class="percent icon"></i>
-                            </span>
+                            {{--<span class="right floated percent">--}}
+                            {{--<span>5</span>--}}
+                            {{--<i class="percent icon"></i>--}}
+                            {{--</span>--}}
                         </div>
                         <div class="extra content">
                             <div class="field">
@@ -291,7 +294,13 @@
                 });
         });
 
-        $('a').popup();
+        $('a').popup({
+            position: 'top left',
+            delay: {
+                show: 300,
+                hide: 800
+            }
+        });
 
         $('#delivery').checkbox({
 

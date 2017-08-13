@@ -188,7 +188,9 @@ class SellController extends Controller
     public function sells_list()
     {
 
-        $sells = SellsModel::where('complete', 1)->paginate(15);
+        $sells = SellsModel::where('complete', 1)
+            ->where('storage_id', Auth::user()->storage_id)
+            ->get()->sortByDesc('id');
 
         return view('sell.sells_list')->with(['sells' => $sells]);
 

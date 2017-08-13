@@ -25,6 +25,14 @@ class SellsModel extends Model
 
     }
 
+    public function worker_model()
+    {
+        $client = $this->hasOne('App\ClientModel', 'id', 'user_id');
+
+        return $client;
+
+    }
+
     public function storage_model()
     {
         return $this->hasOne('App\StorageModel', 'id','storage_id');

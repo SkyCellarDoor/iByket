@@ -8,6 +8,7 @@ use App\SellsModel;
 use App\ShiftModel;
 use App\SpendModel;
 use App\StorageModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\BillModel;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,10 @@ class ShiftController extends Controller
         } else {
 
             $bills = BillModel::WhatKindBillThisUser();
-            $data = $shift->created_at->toDateTimeString();
+            $data = $shift->begin;
+
+            //dd($data);
+
             $begin_cash = $shift->cash;
 
             // поиск счета тип - наличные для этого магазина
@@ -84,7 +88,7 @@ class ShiftController extends Controller
             }
 
 
-            $sell = SellsModel::where('created_at', '>', $data)->get();
+            $sell = SellsModel::where('created_at', '>', $data)->where('storage_id', Auth::user()->storage_id)->get();
 
             //dd($all_operations);
 
@@ -100,11 +104,11 @@ class ShiftController extends Controller
 
     public function endShift(Request $request)
     {
-
         $thisShift = ShiftModel::OpenShift()->first()->id;
         $shift = ShiftModel::find($thisShift);
         $shift->status = 1;
-        $shift->last_cash = $request->cash;
+        $shift->end = new Carbon('now');
+        $shift->last_cash = str_replace(',', '', $request->cash);
         $shift->save();
 
         return redirect()->route('shift');
@@ -117,6 +121,7 @@ class ShiftController extends Controller
         $new_shift->cash = $request->cash;
         $new_shift->status = 0;
         $new_shift->storage_id = StorageModel::UserStorage()->id;
+        $new_shift->begin = new Carbon('now');
         $new_shift->user_id = Auth::id();
         $new_shift->save();
 

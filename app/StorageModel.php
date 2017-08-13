@@ -13,4 +13,10 @@ class StorageModel extends Model
 
         return $query->where('id', Auth::user()->storage_id)->first();
     }
+
+    public function scopePointSell($query)
+    {
+
+        return $query->where('point_sell', 1);
+    }
 }

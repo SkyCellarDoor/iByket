@@ -13,26 +13,27 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="ui menu">
-        <div class="item">&nbsp;<b>{{ $client->name }}</b></div>
-        <a class="item" href="{{ route('new_order') }}/{{ $client->id }}"><i class="plus icon green"></i>Заказ</a>
-        <a class="item" href="{{ route('sell') }}/{{ $client->id }}"><i class="plus icon green"></i>Продажа</a>
+        <div class="item">&nbsp;<b>Сотрудник</b></div>
+        <div class="item"><b>{{ $workers->name }}</b></div>
+        {{--<a class="item" href="{{ route('new_order') }}/{{ $workers->id }}"><i class="plus icon green"></i>Заказ</a>--}}
+        {{--<a class="item" href="{{ route('sell') }}/{{ $workers->id }}"><i class="plus icon green"></i>Продажа</a>--}}
         <div class="right menu">
             <a class="item" data-type="1" href="#fin_modal" onclick="new_fin($(this).attr('data-type'))"> <i
                         class="minus icon red "></i></a>
             <div class="item">
-                @if ( $client->bill < 0 )
+                @if ( $workers->bill < 0 )
                     <div class="ui red mini horizontal statistic">
                         <div class="value">
-                            {{ $client->bill }}
+                            {{ $workers->bill }}
                         </div>
                         <div class="label">
                             руб.
                         </div>
                     </div>
-                @elseif( $client->bill > 0 )
+                @elseif( $workers->bill > 0 )
                     <div class="ui green mini horizontal statistic">
                         <div class="value">
-                            {{ $client->bill }}
+                            {{ $workers->bill }}
                         </div>
                         <div class="label">
                             руб.
@@ -71,20 +72,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($orders->take(5) as $order)
-                        <tr>
-                            <td class="collapsing">
-                                <a href="{{ route('order_detail') }}/{{$order->id}}">{{$order->id}}</a>
-                            </td>
-                            <td>
-                                {{ $order->created_at }}
-                            </td>
-                            <td>
-                                {{ $order->status_history_model->status_name_model->name }}
-                            </td>
 
-                        </tr>
-                    @endforeach
                     </tbody>
                 </table>
             </div>
@@ -113,8 +101,7 @@
                                 <div class="content">
                                     <div class="summary">
                                         <span class="right floated">
-                                          <i class="call square green icon"></i>
-                                            {{ $phone }}
+                                          <i class="call square green icon"></i>{{ $workers->phone }}
                                         </span>
                                     </div>
                                 </div>
@@ -134,7 +121,6 @@
                     <div class="extra content">
                     <span class="left floated calculator">
                       <i class="calculator icon"></i>
-                        {{ $sell_sum }} р.
                     </span>
                         {{--<span class="right floated percent">--}}
                         {{--<span>5</span>--}}
@@ -156,20 +142,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($orders->take(5) as $order)
-                <tr>
-                    <td class="collapsing">
-                        <a href="{{ route('order_detail') }}/{{$order->id}}">{{$order->id}}</a>
-                    </td>
-                    <td>
-                        {{ $order->created_at }}
-                    </td>
-                    <td>
-                        {{ $order->status_history_model->status_name_model->name }}
-                    </td>
 
-                </tr>
-            @endforeach
             </tbody>
         </table>
     </div>
@@ -191,21 +164,6 @@
             </thead>
             <tbody>
 
-            @foreach($sells->take(10) as $sell)
-                <tr>
-                    <td>
-                        <a href="{{ route('sell_detail') }}/{{ $sell->id }}">{{ $sell->id }}</a>
-                    </td>
-                    <td>
-                        {{ $sell->summa }} p.
-                    </td>
-                    <td>
-                        {{ $sell->created_at }}
-                    </td>
-                </tr>
-            @endforeach
-
-
             </tbody>
         </table>
     </div>
@@ -225,28 +183,28 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($bills_operation->take(10) as $operation)
-                <tr>
-                    <td>
-                        {{ $operation->created_at }}
-                    </td>
-                    <td>
-                        @if( $operation->storage_id == NULL )
-                            <span style="font-style: italic;">{{ $operation->comments }}</span>
-                        @else
-                            <span>{{ $operation->comments }}</span>
-                        @endif
-                    </td>
-                    <td>
-                        @if( $operation->storage_id == NULL )
-                            <span style="font-style: italic;">{{ $operation->value }}</span> p.
-                        @else
-                            <span><b>{{ $operation->value }}</b></span> p.
-                        @endif
+            {{--@foreach($bills_operation->take(10) as $operation)--}}
+            {{--<tr>--}}
+            {{--<td>--}}
+            {{--{{ $operation->created_at }}--}}
+            {{--</td>--}}
+            {{--<td>--}}
+            {{--@if( $operation->storage_id == NULL )--}}
+            {{--<span style="font-style: italic;">{{ $operation->comments }}</span>--}}
+            {{--@else--}}
+            {{--<span>{{ $operation->comments }}</span>--}}
+            {{--@endif--}}
+            {{--</td>--}}
+            {{--<td>--}}
+            {{--@if( $operation->storage_id == NULL )--}}
+            {{--<span style="font-style: italic;">{{ $operation->value }}</span> p.--}}
+            {{--@else--}}
+            {{--<span><b>{{ $operation->value }}</b></span> p.--}}
+            {{--@endif--}}
 
-                    </td>
-                </tr>
-            @endforeach
+            {{--</td>--}}
+            {{--</tr>--}}
+            {{--@endforeach--}}
 
 
             </tbody>
@@ -264,7 +222,7 @@
         <div class="content">
             <form id="form_move_money" class="ui form" action="{{ route('fin_operation') }}" method="POST">
                 <input id='type_op' name="type_op" type="hidden" value="">
-                <input id='client_id' name="client_id" type="hidden" value="{{ $client->id }}">
+                <input id='client_id' name="client_id" type="hidden" value="{{ $workers->id }}">
                 {{ csrf_field() }}
                 <div class="ui grid">
                     <div class="four wide column field">

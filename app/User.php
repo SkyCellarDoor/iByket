@@ -33,4 +33,16 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function getPhoneAttribute($value)
+    {
+
+        return $this->attributes['phone'] =
+            "+" .
+            substr($value, 0, 1) . "(" .
+            substr($value, 1, 3) . ")" .
+            substr($value, 4, 3) . "-" .
+            substr($value, 7, 2) . "-" .
+            substr($value, 9, 2);
+    }
+
 }

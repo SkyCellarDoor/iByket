@@ -27,8 +27,8 @@ class ClientsController extends Controller
 
         $data = new ClientModel();
         $data -> role = 1;
-        $data -> name = $request -> name;
-        $data->phone = $phone;
+        $data->name = mb_convert_case($request->name, MB_CASE_TITLE, "UTF-8");
+        $data->phone = "7" . $phone;
         $data -> bill = 0;
         $data -> save();
 
@@ -62,12 +62,6 @@ class ClientsController extends Controller
         $all_op = $bills_operation->merge($auto_operation)->sortBy('created_at');
 
         $phone = $client->phone;
-
-        $phone = "+7(" .
-            substr($phone, 0, 3) . ")" .
-            substr($phone, 3, 3) . "-" .
-            substr($phone, 6, 2) . "-" .
-            substr($phone, 8, 2);
 
         $bills = BillModel::WhatKindBillThisUserCollection();
         $sells = SellsModel::where('client_id', $id)->where('complete', 1)->get();
@@ -121,18 +115,13 @@ class ClientsController extends Controller
 
     public function json ($query){
 
-        $results = ClientModel::Clients()->where('name','like', '%'.$query.'%')
-            ->orWhere('phone','like', '%'.$query.'%')
-            ->get();
 
-        $results->map(function ($item) {
+        $results = ClientModel::Clients()->where(function ($q) use ($query) {
 
-            $item['phone'] = "+7(" .
-                substr($item['phone'], 0, 3) . ")" .
-                substr($item['phone'], 3, 3) . "-" .
-                substr($item['phone'], 6, 2) . "-" .
-                substr($item['phone'], 8, 2);
-        });
+            $q->where('phone', 'like', '%' . $query . '%')->orWhere('name', 'like', '%' . $query . '%');
+
+        })->get();
+
 
         $results = $results->toJson();
 
