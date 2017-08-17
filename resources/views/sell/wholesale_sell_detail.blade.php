@@ -17,7 +17,7 @@
             @if($sell->client_id == NULL)
                 Без клиента
             @else
-                <a href="{{ route('detail_view') }}/{{ $sell->client_id }}">{{ $sell->client_sell_model->name }}</a>
+                <a href="{{ route('opt_client_detail') }}/{{ $sell->client_id }}">{{ $sell->client_sell_model->wholesales_model->company }}</a>
             @endif
         </div>
 
@@ -41,14 +41,14 @@
                         <tbody>
                         @foreach($products as $product)
                             @if($product->product_model->good_model->consist == 0)
-                            <tr>
-                                <td>{{$product->product_model->good_model->name}}</td>
-                                <td>{{$product->amount}} {{$product->product_model->good_model->one_name_model->name_short}}
-                                    .
-                                </td>
-                                <td>{{$product->price}} p.</td>
-                                <td>{{$product->amount * $product->price}} p.</td>
-                            </tr>
+                                <tr>
+                                    <td>{{$product->product_model->good_model->name}}</td>
+                                    <td>{{$product->amount}} {{$product->product_model->good_model->one_name_model->name_short}}
+                                        .
+                                    </td>
+                                    <td>{{$product->price}} p.</td>
+                                    <td>{{$product->amount * $product->price}} p.</td>
+                                </tr>
                             @else
                                 <tr>
                                     <td>{{$product->product_model->good_model->name}}</td>

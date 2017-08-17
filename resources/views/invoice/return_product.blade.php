@@ -9,36 +9,30 @@
 
 @section('content')
 
-    <div class="ui grid">
-        <div class="ui sixteen wide column">
-            <div class="ui segment">
-
-            </div>
-        </div>
-    </div>
-
-
     <div class="ui top attached menu">
-        <div class="item">&nbsp;Накладная на перемещение № {{ $detail->id }}</div>
+        <div class="item">&nbsp;Возрат товара</div>
     </div>
 
     <div class="ui bottom attached segment">
-        <table class="ui very compact small selectable celled table">
+        <table id="table_invoices" class="ui compact selectable celled table">
             <thead>
             <tr>
-                <th>
-                    Товар
-                </th>
-                <th class="collapsing">
-                    Количество
-                </th>
+                <th class="collapsing" nowrap>№</th>
+                <th>Поставщик</th>
+                <th class="collapsing">Дата возрата</th>
+                <th class="collapsing">Сумма</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($items as $item)
+            @foreach($invoice_list as $item)
                 <tr>
-                    <td>{{ $item->move_product_item_model->good_model->name }}</td>
-                    <td>{{ $item->value_one_was }}</td>
+                    <td><a>{{ $item->id }}</a></td>
+                    <td>
+                        <a href="{{ route('detail_provider') }}/{{ $item->provider_id }}">{{ \App\ClientModel::find($item->provider_id)->providers_model->company }}</a>
+                    </td>
+                    <td>{{ substr($item->created_at, 0, 10) }}</td>
+
+                    <td nowrap>{{ $item->sum }} p.</td>
                 </tr>
             @endforeach
             </tbody>

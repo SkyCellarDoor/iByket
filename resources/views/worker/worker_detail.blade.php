@@ -118,15 +118,15 @@
                             {{--</div>--}}
                         </div>
                     </div>
-                    <div class="extra content">
-                    <span class="left floated calculator">
-                      <i class="calculator icon"></i>
-                    </span>
+                    {{--<div class="extra content">--}}
+                    {{--<span class="left floated calculator">--}}
+                    {{--<i class="calculator icon"></i>--}}
+                    {{--</span>--}}
                         {{--<span class="right floated percent">--}}
                         {{--<span>5</span>--}}
                         {{--<i class="percent icon"></i>--}}
                         {{--</span>--}}
-                    </div>
+                    {{--</div>--}}
                 </div>
             </div>
         </div>

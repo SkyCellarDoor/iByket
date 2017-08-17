@@ -11,7 +11,7 @@
 
 
     <div class="ui top attached menu">
-        <div class="item">&nbsp;Список сотрудников</div>
+        <div class="item">&nbsp;Список оптовых продаж</div>
     </div>
 
     <div class="ui bottom attached segment">
@@ -22,37 +22,50 @@
                     №
                 </th>
                 <th>
-                    Имя
-                </th>
-                <th>
-                    Должность
-                </th>
-                <th>
-                    Магазин
+                    Клиент
                 </th>
                 <th>
                     Сумма
                 </th>
+                <th style="width: 1%">
+                    Скидка
+                </th>
+                <th style="width: 1%" nowrap>
+                    Магазаин
+                </th>
+                <th style="width: 1%">
+                    Сотрудник
+                </th>
             </tr>
             </thead>
             <tbody>
-            @foreach($workers as $worker)
+            @foreach($sells as $sell)
                 <tr>
                     <td>
-                        <a href="{{ route('worker_detail') }}/{{ $worker->id }}">{{ $worker->id }}</a>
-                    </td>
-
-                    <td>
-                        {{ $worker->name }}
+                        <a href="{{ route('wholesale_sell_detail') }}/{{ $sell->id }}">{{ $sell->id }}</a>
                     </td>
                     <td>
-                        {{ $worker->role_model->name }}
+                        @if( $sell->client_id == NULL )
+                            Без клиента
+                        @else
+                            <a href="{{ route('wholesale_sell_detail') }}/{{ $sell->client_id }}">{{ $sell->client_sell_model->name }}</a>
+                        @endif
                     </td>
                     <td>
-                        {{ $worker->sell_storage_model->name }}
+                        {{ $sell->summa }} p.
+                    </td>
+                    <td>
+                        @if( $sell->discount == NULL || $sell->discount == 0)
+                            -
+                        @else
+                            {{ $sell->discount }}
+                        @endif
                     </td>
                     <td nowrap>
-                        {{ $worker->bill }}
+                        {{ $sell->storage_model->name }}
+                    </td>
+                    <td nowrap>
+                        {{ $sell->worker_model->name }}
                     </td>
                 </tr>
             @endforeach

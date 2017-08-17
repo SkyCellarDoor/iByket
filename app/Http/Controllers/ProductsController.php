@@ -56,13 +56,12 @@ class ProductsController extends Controller
 
         $products = ProductModel::whereIn('id', $data_product)->get();
 
-        $stores = StorageModel::where('id','!=',0)->where('id','!=',Auth::user()->storage_id)->get();
+        $stores = StorageModel::where('id', '!=', 0)->where('id', '!=', Auth::user()->storage_id)->get();
 
         return view('products.move_product')
             ->with(['products' => $products])
             ->with(['stores' => $stores])
             ->with('back_url', $back_url);
-        //dd($product);
     }
 
     public function move_product_create(Request $request){
@@ -213,13 +212,11 @@ class ProductsController extends Controller
 
             if ( $product_original != NULL && $product -> consist_id != NULL) {
 
-                dump($product_original);
                 $product_original -> amount = $product_original -> amount + $value_real[$key];
                 $product_original -> save();
 
             }
             elseif ($product_original_other_storage != NULL){
-                dump($product_original_other_storage);
 
                 $product_original_other_storage -> amount = $product_original_other_storage -> amount + $value_real[$key];
                 $product_original_other_storage -> save();
@@ -231,6 +228,8 @@ class ProductsController extends Controller
                 $new_product = $product -> replicate();
                 $new_product -> consist_id = $product_moved -> product_id;
                 $new_product -> amount = $value_real[$key];
+                $new_product->consist_amount = $product_moved->value_many_was;
+                $new_product->consist_amount_was = $product_moved->value_many_was;
                 $new_product -> storage_id = $this_storage;
                 $new_product -> user_id = Auth::id();
                 $new_product -> save();

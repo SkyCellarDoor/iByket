@@ -19,30 +19,34 @@
 
 
     <div class="ui top attached menu">
-        <div class="item">&nbsp;Накладная на перемещение № {{ $detail->id }}</div>
+        <div class="item">&nbsp;Список заказов</div>
     </div>
 
     <div class="ui bottom attached segment">
-        <table class="ui very compact small selectable celled table">
-            <thead>
-            <tr>
-                <th>
-                    Товар
-                </th>
-                <th class="collapsing">
-                    Количество
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($items as $item)
-                <tr>
-                    <td>{{ $item->move_product_item_model->good_model->name }}</td>
-                    <td>{{ $item->value_one_was }}</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+        @foreach($orders as $order)
+            <div class="ui top attached grey inverted menu">
+                <div class="item">
+                    {{ $order -> client_opt_id }}
+                </div>
+                <div class="right item">
+                    {{ $order -> date_income }}
+                </div>
+            </div>
+            <div class="ui bottom attached segment">
+                <table class="ui very compact small very basic table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    @foreach($order->orders_item as $item)
+                        <tr>
+                            <td>{{ $item->comment }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endforeach
+    </div>
     </div>
 @endsection
 

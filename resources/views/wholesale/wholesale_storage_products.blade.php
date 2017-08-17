@@ -19,17 +19,17 @@
 
 
     <div class="ui top attached menu">
-        <div class="item">&nbsp;Розничный склад | {{ \App\StorageModel::find(Auth::user()->storage_id)->name }}</div>
-        <a class="item" href="{{ route('list_products') }}/{{ Auth::user()->storage_id }}">Мой склад</a>
-        <a class="item" href="{{ route('list_products') }}">&nbsp;Все склады</a>
+        <div class="item">&nbsp;Товары</div>
+        {{--<div class="ui slider checkbox item right">--}}
+        {{--<input type="checkbox" tabindex="0" class="hidden">--}}
+        {{--<label>Только мой склад</label>--}}
+        {{--</div>--}}
         <div class="ui dropdown right item">
             Операции
             <i class="dropdown icon"></i>
             <div class="menu">
                 <a class="item" id="move_product">Перемещение</a>
-                <a class="item" id="set_cost">Установка цен</a>
-                <a class="item" id="return_product">Возрат поставщику</a>
-                <a class="item" id="spend_product">Списание</a>
+                <a class="item" id="set_cost">Установка оптовых цен</a>
             </div>
         </div>
     </div>
@@ -102,8 +102,8 @@
                             <td> -</td>
                             <td>{{ $product->storage_model->name }}</td>
                             <td nowrap>
-                                @if( $product->one_cost_retail_model )
-                                    {{ $product->one_cost_retail_model->cost }} p.
+                                @if( $product->one_cost_wholesale_model )
+                                    {{ $product->one_cost_wholesale_model->cost }} p.
                                 @else
                                     -
                                 @endif
@@ -143,15 +143,15 @@
                             </td>
                             <td>{{ $product->storage_model->name }}</td>
                             <td nowrap>
-                                @if( $product->one_cost_retail_model )
-                                    {{ $product->one_cost_retail_model->cost }} p.
+                                @if( $product->one_cost_wholesale_model )
+                                    {{ $product->one_cost_wholesale_model->cost }} p.
                                 @else
                                     -
                                 @endif
                             </td>
                             <td nowrap>
-                                @if( $product->many_cost_retail_model )
-                                    {{ $product->many_cost_retail_model->cost }} p.
+                                @if( $product->many_cost_wholesale_model )
+                                    {{ $product->many_cost_wholesale_model->cost }} p.
                                 @else
                                     -
                                 @endif
@@ -246,7 +246,7 @@
 
             $('#set_cost').on('click', function () {
 
-                let url = '{{ route('set_cost') }}';
+                let url = '{{ route('set_cost_wholesale') }}';
 
                 $('#form_cost').prop('action', url);
 
@@ -255,22 +255,6 @@
 
             $('#move_product').on('click', function () {
                 let url = '{{ route('move_product') }}';
-
-                $('#form_cost').prop('action', url);
-
-                $('#form_cost').submit();
-            });
-
-            $('#return_product').on('click', function () {
-                let url = '{{ route('return_create') }}';
-
-                $('#form_cost').prop('action', url);
-
-                $('#form_cost').submit();
-            });
-
-            $('#spend_product').on('click', function () {
-                let url = '{{ route('spend_product_create') }}';
 
                 $('#form_cost').prop('action', url);
 

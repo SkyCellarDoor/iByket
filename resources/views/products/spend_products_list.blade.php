@@ -9,36 +9,36 @@
 
 @section('content')
 
-    <div class="ui grid">
-        <div class="ui sixteen wide column">
-            <div class="ui segment">
-
-            </div>
-        </div>
-    </div>
-
-
     <div class="ui top attached menu">
-        <div class="item">&nbsp;Накладная на перемещение № {{ $detail->id }}</div>
+        <div class="item">&nbsp;Накладные на списание</div>
     </div>
 
     <div class="ui bottom attached segment">
-        <table class="ui very compact small selectable celled table">
+        <table id="table_invoices" class="ui compact selectable celled table">
             <thead>
             <tr>
-                <th>
-                    Товар
-                </th>
-                <th class="collapsing">
-                    Количество
-                </th>
+                <th class="collapsing" nowrap>№</th>
+                <th>Причина списания</th>
+                <th class="collapsing">Дата списания</th>
+                <th class="collapsing">Сумма</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($items as $item)
+            @foreach($spends as $item)
                 <tr>
-                    <td>{{ $item->move_product_item_model->good_model->name }}</td>
-                    <td>{{ $item->value_one_was }}</td>
+                    <td>
+                        <a>
+                            {{ $item->id }}
+                        </a>
+                    </td>
+
+                    <td>
+                        {{ $item->comment }}
+                    </td>
+
+                    <td>{{ substr($item->created_at, 0, 10) }}</td>
+
+                    <td nowrap>{{ $item->sum }} p.</td>
                 </tr>
             @endforeach
             </tbody>

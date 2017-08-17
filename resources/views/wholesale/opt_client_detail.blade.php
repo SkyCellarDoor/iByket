@@ -17,6 +17,10 @@
             <div class="item">ООО "<b>{{ $opt_client->providers_model->company }}</b>"</div>
 
         @endif
+        <a class="item" href="{{ route('wholesale_sell') }}/{{ $opt_client->id }}"><i class="plus green icon"></i>Новая
+            продажа</a>
+        <a id="new_order" class="item"><i class="plus green icon"></i>Новый заказ</a>
+
         <div class="right menu">
             <a class="item" data-type="1" onclick="new_fin($(this).attr('data-type'))"> <i
                         class="minus icon red "></i></a>
@@ -53,8 +57,6 @@
             <a class="item" data-type="0" href="#fin_modal" onclick="new_fin($(this).attr('data-type'))"> <i
                         class="plus icon green"></i></a>
         </div>
-
-
     </div>
 
     <div class="ui bottom attached segment">
@@ -292,9 +294,34 @@
             <input type="submit" class="ui ok green button">
             </form>
         </div>
-
     </div>
 
+    {{--модальное окно добавление заказа--}}
+
+    <div id="order" class="ui mini modal">
+        <i class="close icon"></i>
+        <div class="header">
+            <span>Добавить адрес</span>
+        </div>
+        <div class="content">
+            <form id="order_form" class="ui form" action="{{ route('new_opt_order') }}" method="POST">
+                {{ csrf_field() }}
+                <input name="opt_client_id" type="hidden" value="{{ $opt_client->id }}">
+                <div class="fields">
+                    <div class="field sixteen wide">
+                        <label>Дата поставки</label>
+                        <input id="date" name="date" value="" type="text" readonly>
+                    </div>
+                </div>
+                <div class="ui small error message"></div>
+
+        </div>
+        <div class="actions">
+            <a class="ui black cancel button">Отмена</a>
+            <input type="submit" class="ui ok green button" value="Продолжить">
+            </form>
+        </div>
+    </div>
 @endsection
 
 
@@ -309,8 +336,42 @@
     <script>
 
 
-        $('#add_address').on('click', function () {
+        $('#new_order').on('click', function () {
 
+            $('#order').modal('show');
+
+            $('#date').daterangepicker({
+                drops: 'down',
+                format: 'YYYY-MM-DD',
+                singleDatePicker: true,
+                locale: {
+                    firstDay: 1,
+                },
+            });
+
+            $("#order").modal({
+                onApprove: function () {
+                    $("#order_form").form({
+                        fields: {
+                            date: {
+                                identifier: 'date',
+                                rules: [{
+                                    type: 'empty',
+                                    prompt: 'Выберите дату поставку'
+                                }]
+                            },
+                        }
+                    });
+
+                    if ($("#order_form").form('is valid')) {
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        });
+
+        $('#add_address').on('click', function () {
 
             $('#address').modal('show');
 

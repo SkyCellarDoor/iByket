@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    <form action="{{ route('create_order') }}" method="post">
+    <form action="{{ route('create_order') }}" method="post" class="ui form" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="ui top attached menu">
 
@@ -40,9 +40,6 @@
                     <div class="ui segment">
                         <div class="ui grid">
                             <div class="ui sixteen wide column">
-
-                                <div class="ui form">
-
                                     <input name="client_id" type="hidden" value="{{ $client->id }}">
 
                                     <div class="field">
@@ -54,7 +51,7 @@
                                         <label>Картинка</label>
                                         <div class="ui action input">
                                             <input type="text" readonly>
-                                            <input type="file" style="display: none;">
+                                            <input name="image" type="file" style="display: none;">
                                             <div class="ui icon button">
                                                 <i class="cloud upload icon"></i>
                                             </div>
@@ -66,7 +63,7 @@
                                             <label><span id="delivery_type_text">Время&nbsp;самовывоза</span></label>
                                             <div class="ui input left icon">
                                                 <i class="calendar icon"></i>
-                                                <input id="date" data-datepicker="2017-03-01 22:11" type="text" value=""
+                                                <input id="date" type="text" value=""
                                                        readonly>
                                                 <input type="hidden" id="form_time" name="date_delivery" value=""/>
                                             </div>
@@ -97,7 +94,6 @@
                                         </div>
                                     </div>
 
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -165,34 +161,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{--@if (count($orders) > 0)--}}
-                        {{--<div class="content">--}}
-                        {{--@foreach($orders as $order)--}}
-                        {{--<div class="ui small feed">--}}
-                        {{--<div class="event">--}}
-                        {{--<div class="content">--}}
-                        {{--<div class="extra text">--}}
-                        {{--<a class="ui icon" data-position="left center">--}}
-                        {{--{{ $order->id }}--}}
-                        {{--</a>--}}
-                        {{--<div class="ui fluid popup">--}}
-                        {{--<div class="ui two column grid">--}}
-                        {{--<div class="column">--}}
-                        {{--<h4 class="ui header">Заказ {{ $order->id }}</h4>--}}
-                        {{--<div class="ui link list">--}}
-                        {{--<span>{{ $order->comments }}</span>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--на адрес: {{ $order->address_model->address }}<a><span class="address">{{ $order->address_model->address }}</span></a>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--@endforeach--}}
-                        {{--</div>--}}
-                        {{--@endif--}}
                         <div class="extra content">
                         <span class="left floated calculator">
                           <i class="calculator icon"></i>

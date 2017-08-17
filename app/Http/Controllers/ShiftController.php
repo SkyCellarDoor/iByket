@@ -8,6 +8,7 @@ use App\SellsModel;
 use App\ShiftModel;
 use App\SpendModel;
 use App\StorageModel;
+use App\WholesaleSellsModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\BillModel;
@@ -87,8 +88,31 @@ class ShiftController extends Controller
 
             }
 
+            if (Auth::user()->role != 7) {
 
-            $sell = SellsModel::where('created_at', '>', $data)->where('storage_id', Auth::user()->storage_id)->get();
+                $sell = SellsModel::where('created_at', '>', $data)->where('storage_id', Auth::user()->storage_id)->get();
+
+                return view('shift.shift')
+                    ->with(['operations' => $all_operations])
+                    ->with(['sells' => $sell])
+                    ->with(['bill_sum' => $bill_sum])
+                    ->with(['bills' => $bills])
+                    ->with('all_amount', $all_amount)
+                    ->with('default_bill', $default_bill);
+
+            } else {
+
+                $sell = WholesaleSellsModel::where('created_at', '>', $data)->where('storage_id', Auth::user()->storage_id)->get();
+
+                return view('shift.shift_wholesale')
+                    ->with(['operations' => $all_operations])
+                    ->with(['sells' => $sell])
+                    ->with(['bill_sum' => $bill_sum])
+                    ->with(['bills' => $bills])
+                    ->with('all_amount', $all_amount)
+                    ->with('default_bill', $default_bill);
+
+            }
 
             //dd($all_operations);
 

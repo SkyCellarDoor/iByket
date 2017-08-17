@@ -54,6 +54,9 @@
 
             <div class="ui top attached tabular menu ">
                 <a class="item active " data-tab="first">Описание</a>
+                @if ($order->img != NULL)
+                    <a class="item" data-tab="image">Изображения</a>
+                @endif
                 <a class="item" data-tab="second">История</a>
             </div>
             <div class="ui bottom attached tab segment active" data-tab="first">
@@ -270,7 +273,14 @@
                 </tbody>
             </table>
         </div>
-    </div>
+
+    @if ($order->img != NULL)
+        <div class="ui bottom attached tab segment" data-tab="image">
+            <img class="ui image" src="../storage/orders/{{$order->img}}">
+        </div>
+        @endif
+
+        </div>
     </form>
     {{--модальное окно зачисления на счет--}}
     <div id="fin_modal" class="ui small modal">

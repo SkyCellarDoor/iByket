@@ -15,8 +15,9 @@ class ClientModel extends Model
 
     public function scopeWorker($query)
     {
+        $role = [3, 5, 7];
 
-        return $query->where('role', 3);
+        return $query->whereIn('role', $role);
     }
 
     public function scopeProviders($query) {
@@ -45,6 +46,16 @@ class ClientModel extends Model
         return $this->hasOne('App\ProvidersModel', 'id', 'company_id');
     }
 
+    public function role_model()
+    {
+        return $this->hasOne('App\RoleUserModel', 'id', 'role');
+    }
+
+    public function storage_model()
+    {
+        return $this->hasOne('App\StorageModel', 'id', 'storage_id');
+    }
+
     public function spendFromBill ($value){
 
         $this -> bill = $this -> bill - $value;
@@ -63,8 +74,8 @@ class ClientModel extends Model
 
         return $this->attributes['phone'] =
             "+" .
-            substr($value, 0, 1) . "(" .
-            substr($value, 1, 3) . ")" .
+            substr($value, 0, 1) . " (" .
+            substr($value, 1, 3) . ") " .
             substr($value, 4, 3) . "-" .
             substr($value, 7, 2) . "-" .
             substr($value, 9, 2);

@@ -27,7 +27,8 @@
                                 <div class="field">
                                     <label>Сумма</label>
                                     <div class="ui input">
-                                        <input id="value" type="number" max="" name="value" placeholder="Введите сумму">
+                                        <input id="value" type="number" step="0.01" max="" name="value"
+                                               placeholder="Введите сумму">
                                     </div>
                                 </div>
                                 <div class="field">

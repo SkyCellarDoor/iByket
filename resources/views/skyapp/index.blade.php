@@ -59,7 +59,6 @@
     <div class="menu">
         <div class="ui dropdown item">Склад<i class="dropdown icon"></i>
             <div class="menu">
-                <a class="item" href="{{ route('invoice_list') }}">Поступления</a>
                 <div class="item">
                     <i class="dropdown icon"></i>
                     <span class="text">Товары</span>
@@ -69,6 +68,8 @@
                         <a class="item" href="{{ route('list_goods') }}">Наименования</a>
                         <a class="item" href="{{ route('move_products_list') }}">Перемещения</a>
                         <a class="item" href="{{ route('income_move_product') }}">Входящие перемещения</a>
+                        <a class="item" href="{{ route('invoice_list') }}">Поступления</a>
+                        <a class="item" href="{{ route('spend_product_list') }}">Списание</a>
                     </div>
                 </div>
                 <div class="item">
@@ -76,7 +77,7 @@
                     <span class="text">Поставщики</span>
                     <div class="right menu">
                         <a class="item" href="{{ route('list_providers') }}">Список</a>
-                        <div class="item">Возврат товара</div>
+                        <a class="item" href="{{ route('invoice_list_return') }}">Возврат товара</a>
                     </div>
                 </div>
             </div>
@@ -94,7 +95,9 @@
                         <a class="item">??</a>
                     </div>
                 </div>
-                <a class="item" href="">???</a>
+                <a class="item" href="{{ route('wholesale_product_list') }}">Склад</a>
+                <a class="item" href="{{ route('order_wholesale_list') }}">Заказы</a>
+                <a class="item" href="{{ route('income_move_product') }}">Входящие перемещения</a>
             </div>
         </div>
     </div>
@@ -190,6 +193,28 @@
                 <i class="plus green icon"></i>
             </a>
             <div class="ui dropdown item">{{ \Auth::user()->name }}<i class="dropdown icon"></i> <div class="menu">
+                    <a class="item">Аккаунт</a>
+                    <a class="item">Настройки</a>
+                    <div class="divider"></div>
+                    <a href="{{ route('logout') }}" class="item">Выход</a>
+                </div>
+            </div>
+        </div>
+    </div>
+@elseif(\Auth::user()->role == 7)
+    <div class="ui menu">
+        <a class="item" href="{{ route('home') }}">Домой </a>
+        <a class="item" href="{{ route('shift') }}">Смена </a>
+        <a class="item" href="{{ route('wholesale_sells_list') }}">Список</a>
+        <a class="item" href="{{ route('opt_clients_list') }}">Оптовые клиенты</a>
+        <a class="item" href="{{ route('wholesale_product_list') }}">Склад</a>
+        <a class="item" href="{{ route('income_move_product') }}">Входящие перемещения</a>
+
+
+        <div class="right menu">
+
+            <div class="ui dropdown item">{{ \Auth::user()->name }}<i class="dropdown icon"></i>
+                <div class="menu">
                     <a class="item">Аккаунт</a>
                     <a class="item">Настройки</a>
                     <div class="divider"></div>

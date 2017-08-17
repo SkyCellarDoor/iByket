@@ -57,7 +57,7 @@
 
         <i class="close icon"></i>
         <div class="header">
-            <span id="type_name">Добавление поставщика</span>
+            <span id="type_name">Добавление оптового клиента</span>
         </div>
         <div class="content">
             <form id="new_opt_client_form" class="ui form" action="{{ route('create_opt_client') }}" method="POST">

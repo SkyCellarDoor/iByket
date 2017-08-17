@@ -17,17 +17,6 @@
 
     <div class="ui top attached menu">
         <div class="item">&nbsp;<span id="name_product">{{ $product->name }}</span></div>
-
-        <div class="ui right dropdown item">
-            ???????
-            <i class="dropdown icon"></i>
-            <div class="menu">
-                <div class="item">?????</div>
-                <div class="item">????</div>
-            </div>
-        </div>
-
-
     </div>
 
     <div class="ui top attached tabular menu">

@@ -38,6 +38,11 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::post('/invoice_add_item', 'InvoiceController@add_item')->name('add_item');
     Route::post('/invoice_complete', 'InvoiceController@complete')->name('invoice_complete');
 
+//возрат товара поставщику
+    Route::get('/return_product_list', 'ReturnProductController@invoice_list_return')->name('invoice_list_return');
+    Route::post('/return_create/', 'ReturnProductController@return_create')->name('return_create');
+    Route::post('/return_complete', 'ReturnProductController@return_complete')->name('return_complete');
+
 // перемещение товара
     Route::post('/move_product', 'ProductsController@move_product')->name('move_product');
     Route::post('/move_product_create', 'ProductsController@move_product_create')->name('move_product_create');
@@ -71,8 +76,11 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::post('/sell', 'SellController@result_table')->name('result_table');
     Route::post('/sell_delete_product', 'SellController@delete_product')->name('delete_product');
     Route::post('/complete', 'SellController@complete')->name('complete');
+    Route::post('/complete_wholesale', 'SellController@complete_wholesale')->name('complete_wholesale');
     Route::get('/sells', 'SellController@sells_list')->name('sells_list');
+    Route::get('/whole_sale_sells', 'SellController@wholesale_sells_list')->name('wholesale_sells_list');
     Route::get('/sell_view/{id?}', 'SellController@sell_detail')->name('sell_detail');
+    Route::get('/wholesale_sell_view/{id?}', 'SellController@wholesale_sell_detail')->name('wholesale_sell_detail');
     Route::post('/sell/add_item', 'SellController@add_item')->name('add_item_sell');
 
 //отчет
@@ -86,16 +94,24 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::post('/good/sub_cat', 'GoodController@sub_cat')->name('sub_cat_good');
     Route::post('/promotion/new', 'PromotionController@new_promotion')->name('new_promotion');
 
+// списание товара
+    Route::get('/spend_product_list', 'ProductSpendsController@spend_product_list')->name('spend_product_list');
+    Route::post('/spend_product', 'ProductSpendsController@spend_create')->name('spend_product_create');
+    Route::post('/spend_complete', 'ProductSpendsController@spend_complete')->name('spend_product_complete');
+
 // список наименований
     Route::get('/list_good', 'GoodController@list_goods')->name('list_goods');
 
 //установка цен на продукты
     Route::post('/set_cost', 'SetCostController@set_cost')->name('set_cost');
+    Route::post('/set_cost_wholesale', 'SetCostController@set_cost_wholesale')->name('set_cost_wholesale');
     Route::post('/set_cost_complete', 'SetCostController@set_cost_complete')->name('set_cost_complete');
+    Route::post('/set_cost_wholesale_complete', 'SetCostController@set_cost_wholesale_complete')->name('set_cost_wholesale_complete');
 
 
 //API поиска
     Route::get('/search/product/{query?}', 'APIController@product')->name('product_search');
+    Route::get('/search/product_wholesale/{query?}', 'APIController@product_wholesale')->name('product_wholesale_search');
     Route::get('/search/good/{query?}', 'APIController@good')->name('good_search');
 
 
@@ -129,9 +145,18 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::post('/shift/new', 'ShiftController@newShift')->name('new_shift');
 
 // опт
+    Route::get('/wholesale_sell/{id?}', 'WholesaleController@index')->name('wholesale_sell');
     Route::get('/opt_clients', 'WholesaleController@opt_clients')->name('opt_clients_list');
     Route::get('/opt_clients_detail/{id?}', 'WholesaleController@opt_clients_detail')->name('opt_client_detail');
     Route::post('/create_opt_client', 'WholesaleController@create_opt_client')->name('create_opt_client');
+    Route::post('/wholesale_sell/add_item', 'WholesaleController@add_item')->name('wholesale_add_item_sell');
+    Route::get('/wholesale_product/', 'WholesaleController@wholesale_product')->name('wholesale_product_list');
+    Route::get('/order_wholesale_list/', 'WholesaleController@order_list')->name('order_wholesale_list');
+    Route::post('/new_opt_order/', 'WholesaleController@new_opt_order')->name('new_opt_order');
+    Route::post('/save_opt_order/', 'WholesaleController@save_opt_order')->name('save_opt_order');
+    Route::post('/add_item_opt_order/', 'WholesaleController@add_item_order')->name('add_item_opt_order');
+    Route::post('/remove_item_opt_order/', 'WholesaleController@remove_item_order')->name('remove_item_opt_order');
+
 
 // адреса и контакты
     Route::post('/add_address', 'WholesaleController@add_address')->name('add_address');

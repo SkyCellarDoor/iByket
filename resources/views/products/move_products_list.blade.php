@@ -49,11 +49,11 @@
                     <tr>
                         <td><a href="{{ route('move_products_detail') }}/{{ $item->id }}">{{ $item->id }}</a></td>
                         <td nowrap>{{ $item->created_at }}</td>
-                        <td>{{ $item->user_id }}</td>
-                        <td>{{ $item->from_storage }}</td>
-                        <td>{{ $item->to_storage }}</td>
-                        @if( $item->user_take != NULL )
-                            <td>{{ $item->user_take }}</td>
+                        <td nowrap>{{ $item->user_model->name }}</td>
+                        <td nowrap>{{ $item->storage_from_model->name }}</td>
+                        <td nowrap>{{ $item->storage_to_model->name }}</td>
+                        @if( $item->user_take_model != NULL )
+                            <td nowrap>{{ $item->user_take_model->name }}</td>
                         @else
                             <td>-</td>
                         @endif
@@ -91,11 +91,11 @@
                     <tr>
                         <td><a href="{{ route('move_products_detail') }}/{{ $item->id }}">{{ $item->id }}</a></td>
                         <td nowrap>{{ $item->created_at }}</td>
-                        <td>{{ $item->user_id }}</td>
-                        <td>{{ $item->from_storage }}</td>
-                        <td>{{ $item->to_storage }}</td>
-                        @if( $item->user_take != NULL )
-                            <td>{{ $item->user_take }}</td>
+                        <td nowrap>{{ $item->user_model->name }}</td>
+                        <td nowrap>{{ $item->storage_from_model->name }}</td>
+                        <td nowrap>{{ $item->storage_to_model->name }}</td>
+                        @if( $item->user_take_model != NULL )
+                            <td nowrap>{{ $item->user_take_model->name }}</td>
                         @else
                             <td>-</td>
                         @endif
@@ -133,11 +133,11 @@
                     <tr>
                         <td><a href="{{ route('move_products_detail') }}/{{ $item->id }}">{{ $item->id }}</a></td>
                         <td nowrap>{{ $item->created_at }}</td>
-                        <td>{{ $item->user_id }}</td>
-                        <td>{{ $item->from_storage }}</td>
-                        <td>{{ $item->to_storage }}</td>
-                        @if( $item->user_take != NULL )
-                            <td>{{ $item->user_take }}</td>
+                        <td nowrap>{{ $item->user_model->name }}</td>
+                        <td nowrap>{{ $item->storage_from_model->name }}</td>
+                        <td nowrap>{{ $item->storage_to_model->name }}</td>
+                        @if( $item->user_take_model != NULL )
+                            <td nowrap>{{ $item->user_take_model->name }}</td>
                         @else
                             <td>-</td>
                         @endif
@@ -175,11 +175,11 @@
                     <tr>
                         <td><a href="{{ route('move_products_detail') }}/{{ $item->id }}">{{ $item->id }}</a></td>
                         <td nowrap>{{ $item->created_at }}</td>
-                        <td>{{ $item->user_id }}</td>
-                        <td>{{ $item->from_storage }}</td>
-                        <td>{{ $item->to_storage }}</td>
-                        @if( $item->user_take != NULL )
-                            <td>{{ $item->user_take }}</td>
+                        <td nowrap>{{ $item->user_model->name }}</td>
+                        <td nowrap>{{ $item->storage_from_model->name }}</td>
+                        <td nowrap>{{ $item->storage_to_model->name }}</td>
+                        @if( $item->user_take_model != NULL )
+                            <td nowrap>{{ $item->user_take_model->name }}</td>
                         @else
                             <td>-</td>
                         @endif

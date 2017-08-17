@@ -11,6 +11,9 @@ use App\StorageModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Jenssegers\Date\Date;
 
 class OrderController extends Controller
@@ -132,9 +135,6 @@ class OrderController extends Controller
 
 
 
-        //dd($request);
-
-
         if ($request->delivery != 0) {
             $address = new AddressDeliveryModel();
             $address->user = $request->client_id;
@@ -183,6 +183,34 @@ class OrderController extends Controller
 
         $status_update = OrdersModel::find($orders->id);
         $status_update->status_id = $status->id;
+
+
+        if ($request->image != NULL) {
+
+            $image = Input::file('image');
+            $filename = $orders->id . '.' . $image->getClientOriginalExtension();
+            $path = public_path('../storage/app/public/orders/' . $filename);
+
+
+            Image::make($image->getRealPath())->resize(640, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($path);
+
+            $status_update->img = $filename;
+
+        }
+//
+////            Storage::disk('public')->makeDirectory('/orders/'.$orders->id, $mode = 0755, $recursive = false, $force = false);
+////
+////            Image::make(Input::file('image'))
+////                ->resize(640, null, function ($constraint) {
+////                    $constraint->aspectRatio();
+////            }
+////            )->save(public_path('/'.$orders->id.'.jpg'));
+//            $status_update->img = $filename;
+//
+//        }
+
         $status_update->save();
 
         return redirect()->route('orders_list');
@@ -206,7 +234,7 @@ class OrderController extends Controller
             $order->summa = NULL;
             $order->comments = trim($request->comment);
             $order->time_delivery = $request->date_delivery;
-            $order->storage_id = $request->storage;;
+            $order->storage_id = $request->storage;
             $order->save();
         } else {
 

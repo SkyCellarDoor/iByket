@@ -19,4 +19,9 @@ class StorageModel extends Model
 
         return $query->where('point_sell', 1);
     }
+
+    public function storage_model()
+    {
+        return $this->hasOne('App\StorageModel', 'id', 'storage_id');
+    }
 }

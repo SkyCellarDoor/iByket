@@ -10,7 +10,7 @@
 @section('content')
 
     <div class="ui top attached menu">
-        <div class="item">&nbsp;Установка розничных цен</div>
+        <div class="item">&nbsp;Установка оптовых цен</div>
         <div class="right item">
             <div class="ui mini input">
                 <input class="all_percent" type="number" min="0" placeholder="Общий процент" style="width: 120px">
@@ -21,7 +21,7 @@
         <table class="ui very compact small selectable celled table dimmable">
             <thead>
             <tr>
-                <th class="collapsing">
+                <th>
                     #
                 </th>
                 <th>
@@ -36,13 +36,13 @@
                 <th colspan="2">
                     Цена
                 </th>
-                <th colspan="2" style="width:10%;">
+                <th colspan="2" style="width:15%;">
                     Изменение
                 </th>
             </tr>
             </thead>
             <tbody>
-            <form id="set_cost_form" action="{{ route('set_cost_complete') }}" method="post" class="ui form">
+            <form action="{{ route('set_cost_wholesale_complete') }}" method="post">
                 {{ csrf_field() }}
                 <input type="hidden" name="back_url" value="{{ $back_url }}">
                 @foreach($products as $product)
@@ -50,7 +50,7 @@
                         <td>
                             {{ $product->id }}
                         </td>
-                        @if( $product->consist_amount == NULL)
+                        @if( $product->consist_amount_was == NULL)
                             <td>
                                 <div class="ui small feed">
                                     <div class="event">
@@ -68,7 +68,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td colspan="2" style="width:10%;">
+                            <td colspan="2" class="collapsing">
                                 <div style="font-size: 0.85714286em;">
                                     <i class="cube grey icon"></i>
                                     <span id="prime_cost_one_{{ $product->id }}">
@@ -76,24 +76,23 @@
                                 </span> p.
                                 </div>
                             </td>
-                            <td colspan="2" nowrap style="width:10%;">
-                                @if( $product->one_cost_sell_id == NULL)
+                            <td colspan="2" nowrap>
+                                @if( $product->one_cost_sell_opt_id == NULL)
                                     -
                                 @else
                                     <div style="font-size: 0.85714286em;">
                                         <i class="cube grey icon"></i>
-                                        {{ $product->one_cost_retail_model->cost}} p.
+                                        {{ $product->one_cost_wholesale_model->cost}} p.
                                     </div>
                                 @endif
                             </td>
-                            <td colspan="2" class="collapsing" style="padding: 1px; width:10%;">
+                            <td colspan="2" class="collapsing" style="padding: 1px;">
                                 <div class="ui mini labeled left icon input">
                                     <i class="cube grey icon"></i>
-                                    <input id="price" name="new_price_one[]" class="cost"
+                                    <input name="new_price_one[]" class="cost"
                                            data-role="one"
                                            data-id="{{ $product->id }}" type="text"
-                                           style="width:143px; box-sizing: border-box;"
-                                           value="{{ $product->one_cost_retail_model != NULL ? $product->one_cost_retail_model->cost : "" }}">
+                                           style="width:143px; box-sizing: border-box;">
                                     <input type="hidden" name="new_price_many[]" value="">
                                 </div>
                             </td>
@@ -147,23 +146,23 @@
                             </td>
                             {{--за единицу--}}
                             <td class="collapsing">
-                                @if( $product->one_cost_sell_id == NULL)
+                                @if( $product->one_cost_sell_opt_id == NULL)
                                     -
                                 @else
                                     <div style="font-size: 0.85714286em;">
                                         <i class="cube grey icon"></i>
-                                        {{ $product->one_cost_retail_model->cost}} p.
+                                        {{ $product->one_cost_wholesale_model->cost}} p.
                                     </div>
                                 @endif
                             </td>
                             {{--за составляющую--}}
                             <td class="collapsing">
-                                @if( $product->many_cost_sell_id == NULL)
+                                @if( $product->many_cost_sell_opt_id == NULL)
                                     -
                                 @else
                                     <div style="font-size: 0.85714286em;">
                                         <i class="cubes grey icon"></i>
-                                        {{ $product->many_cost_retail_model->cost}} p.
+                                        {{ $product->many_cost_wholesale_model->cost}} p.
                                     </div>
                                 @endif
                             </td>
@@ -174,8 +173,7 @@
                                     <input name="new_price_one[]" class="cost"
                                            data-id="{{ $product->id }}" type="text"
                                            data-role="one"
-                                           style="width:70px; box-sizing: border-box;"
-                                           value="{{ $product->one_cost_retail_model != NULL ? $product->one_cost_retail_model->cost : "" }}">
+                                           style="width:70px; box-sizing: border-box;">
                                 </div>
                             </td>
                             {{--за составляющую--}}
@@ -185,8 +183,7 @@
                                     <input name="new_price_many[]" class="cost"
                                            data-id="{{ $product->id }}" type="text"
                                            data-role="many"
-                                           style="width:70px; box-sizing: border-box;"
-                                           value="{{ $product->many_cost_retail_model != NULL ? $product->many_cost_retail_model->cost : "" }}">
+                                           style="width:70px; box-sizing: border-box;">
                                 </div>
                             </td>
                             {{--за единицу--}}
@@ -230,22 +227,6 @@
 
 @section('script')
     <script>
-        $("#form_move_money")
-            .form({
-                fields: {
-                    new_price_one: {
-                        identifier: '#price',
-                        rules: [
-                            {
-                                type: 'empty',
-                                prompt: 'Введите сумму'
-                            }
-                        ]
-                    },
-
-                }
-            });
-
         $('.cost').on('input', function () {
 
             var id = $(this).data('id');
