@@ -77,12 +77,12 @@
                                 </div>
                             </td>
                             <td colspan="2" nowrap style="width:10%;">
-                                @if( $product->one_cost_sell_id == NULL)
+                                @if( $product->LastCostRetailOne() == NULL)
                                     -
                                 @else
                                     <div style="font-size: 0.85714286em;">
                                         <i class="cube grey icon"></i>
-                                        {{ $product->one_cost_retail_model->cost}} p.
+                                        {{ $product->LastCostRetailOne()->cost}} p.
                                     </div>
                                 @endif
                             </td>
@@ -93,7 +93,7 @@
                                            data-role="one"
                                            data-id="{{ $product->id }}" type="text"
                                            style="width:143px; box-sizing: border-box;"
-                                           value="{{ $product->one_cost_retail_model != NULL ? $product->one_cost_retail_model->cost : "" }}">
+                                           value="{{ $product->LastCostRetailOne() != NULL ? $product->LastCostRetailOne()->cost : "" }}">
                                     <input type="hidden" name="new_price_many[]" value="">
                                 </div>
                             </td>
@@ -147,23 +147,23 @@
                             </td>
                             {{--за единицу--}}
                             <td class="collapsing">
-                                @if( $product->one_cost_sell_id == NULL)
+                                @if( $product->LastCostRetailOne() == NULL)
                                     -
                                 @else
                                     <div style="font-size: 0.85714286em;">
                                         <i class="cube grey icon"></i>
-                                        {{ $product->one_cost_retail_model->cost}} p.
+                                        {{ $product->LastCostRetailOne()->cost}} p.
                                     </div>
                                 @endif
                             </td>
                             {{--за составляющую--}}
                             <td class="collapsing">
-                                @if( $product->many_cost_sell_id == NULL)
+                                @if( $product->LastCostRetailMany() == NULL)
                                     -
                                 @else
                                     <div style="font-size: 0.85714286em;">
                                         <i class="cubes grey icon"></i>
-                                        {{ $product->many_cost_retail_model->cost}} p.
+                                        {{ $product->LastCostRetailMany()->cost}} p.
                                     </div>
                                 @endif
                             </td>
@@ -175,7 +175,7 @@
                                            data-id="{{ $product->id }}" type="text"
                                            data-role="one"
                                            style="width:70px; box-sizing: border-box;"
-                                           value="{{ $product->one_cost_retail_model != NULL ? $product->one_cost_retail_model->cost : "" }}">
+                                           value="{{ $product->LastCostRetailOne() != NULL ? $product->LastCostRetailOne()->cost : "" }}">
                                 </div>
                             </td>
                             {{--за составляющую--}}
@@ -186,7 +186,7 @@
                                            data-id="{{ $product->id }}" type="text"
                                            data-role="many"
                                            style="width:70px; box-sizing: border-box;"
-                                           value="{{ $product->many_cost_retail_model != NULL ? $product->many_cost_retail_model->cost : "" }}">
+                                           value="{{ $product->LastCostRetailMany() != NULL ? $product->LastCostRetailMany()->cost : "" }}">
                                 </div>
                             </td>
                             {{--за единицу--}}

@@ -104,6 +104,7 @@ Route::group(['middleware' => 'authcheck'], function () {
 
 //установка цен на продукты
     Route::post('/set_cost', 'SetCostController@set_cost')->name('set_cost');
+    Route::get('/set_cost/{array?}', 'SetCostController@set_cost_array')->name('set_cost_array');
     Route::post('/set_cost_wholesale', 'SetCostController@set_cost_wholesale')->name('set_cost_wholesale');
     Route::post('/set_cost_complete', 'SetCostController@set_cost_complete')->name('set_cost_complete');
     Route::post('/set_cost_wholesale_complete', 'SetCostController@set_cost_wholesale_complete')->name('set_cost_wholesale_complete');
@@ -156,6 +157,7 @@ Route::group(['middleware' => 'authcheck'], function () {
     Route::post('/save_opt_order/', 'WholesaleController@save_opt_order')->name('save_opt_order');
     Route::post('/add_item_opt_order/', 'WholesaleController@add_item_order')->name('add_item_opt_order');
     Route::post('/remove_item_opt_order/', 'WholesaleController@remove_item_order')->name('remove_item_opt_order');
+    Route::post('/update_opt_client/', 'WholesaleController@update_opt_client')->name('update_opt_client');
 
 
 // адреса и контакты

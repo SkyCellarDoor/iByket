@@ -20,28 +20,17 @@
                         <div class="header">
                             {{ $storage->name }}
                         </div>
-                        <div class="meta">
-                            <i class="plus icon"></i> <span class="right floated">1</span>
-                        </div>
-                        <div class="meta">
-                            3
-                        </div>
-                        <div class="meta">
-                            3
-                        </div>
-                    </div>
-                    <div class="extra content">
-                        <div class="header">
-                      <span class="right floated">
-                       5
-                      </span>
-                        </div>
+                        @foreach($storage->bills_model as $bill)
+                            <div class="meta">
+                                <i class="{{ $bill->image }} icon"></i> <span class="right floated"> {{ $bill->SumBillShift() }}
+                                    p.</span>
+                            </div>
+
+                        @endforeach
                     </div>
                 </div>
             @endforeach
-
         </div>
-
     </div>
 
     <div class="ui segment">
@@ -62,93 +51,114 @@
 
 @section('script')
     <script>
-        var chartData = generateChartData();
         var chart = AmCharts.makeChart("chartdiv", {
             "type": "serial",
-            "theme": "",
+            "theme": "light",
+            "marginTop": 0,
             "marginRight": 80,
-            "autoMarginOffset": 20,
-            "marginTop": 7,
-            "dataProvider": chartData,
+            "dataProvider": [
+                    @forEach ($sells as $key => $value)
+                {
+                    "day": "{{$key}}",
+                    "value": "{{ $value['r_sell'] }}",
+                    "value2": "{{ $value['w_sell'] }}",
+                    "value3": "{{ $value['sell'] }}"
+                },
+                @endforeach
+            ],
             "valueAxes": [{
-                "axisAlpha": 0.2,
-                "dashLength": 1,
+                "axisAlpha": 0,
                 "position": "left"
             }],
-            "mouseWheelZoomEnabled": true,
-            "graphs": [{
-                "id": "g1",
-                "balloonText": "[[value]]" + " p.",
+            "graphs": [
+                {
+                    "id": "g1",
+                    "balloonText": "[[category]]<br><b><span style='font-size:12px;'>[[value]]</span></b>",
                 "bullet": "round",
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "hideBulletsCount": 50,
-                "title": "red line",
-                "valueField": "visits",
-                "useLineColorForBulletBorder": true,
-                "balloon": {
-                    "drop": true
+                    "bulletSize": 8,
+                    "lineColor": "#d1655d",
+                    "lineThickness": 2,
+                    "negativeLineColor": "#637bb6",
+                    "title": "Розничные продажи",
+                    "type": "smoothedLine",
+                    "valueField": "value"
+                },
+                {
+                    "id": "g2",
+                    "balloonText": "[[category]]<br><b><span style='font-size:12px;'>[[value]]</span></b>",
+                    "bullet": "round",
+                    "bulletSize": 8,
+                    "lineColor": "#423dd1",
+                    "lineThickness": 2,
+                    "negativeLineColor": "#637bb6",
+                    "title": "Оптовые продажи",
+                    "type": "smoothedLine",
+                    "valueField": "value2"
+                },
+                {
+                    "id": "g3",
+                    "balloonText": "[[category]]<br><b><span style='font-size:12px;'>[[value]]</span></b>",
+                    "bullet": "round",
+                    "bulletSize": 8,
+                    "lineColor": "#2bd13e",
+                    "lineThickness": 2,
+                    "negativeLineColor": "#637bb6",
+                    "title": "Общая",
+                    "type": "smoothedLine",
+                    "valueField": "value3"
                 }
-            }],
+            ],
             "chartScrollbar": {
+                "graph": "g3",
+                "gridAlpha": 0,
+                "color": "#888888",
+                "scrollbarHeight": 55,
+                "backgroundAlpha": 0,
+                "dragIcon": "dragIconRectSmallBlack",
+                "selectedBackgroundAlpha": 0.1,
+                "selectedBackgroundColor": "#888888",
+                "graphFillAlpha": 0,
                 "autoGridCount": true,
-                "graph": "g1",
-                "scrollbarHeight": 50
+                "selectedGraphFillAlpha": 0,
+                "graphLineAlpha": 0.2,
+                "graphLineColor": "#c2c2c2",
+                "selectedGraphLineColor": "#888888",
+                "selectedGraphLineAlpha": 1
+
             },
             "chartCursor": {
-                "limitToGraph": "g1"
+                "categoryBalloonDateFormat": "YYYY-MM-DD",
+                "cursorAlpha": 0,
+                "valueLineEnabled": true,
+                "valueLineBalloonEnabled": true,
+                "valueLineAlpha": 0.5,
+                "fullWidth": true
             },
-            "categoryField": "date",
+            "dataDateFormat": "YYYY-MM-DD",
+            "categoryField": "day",
             "categoryAxis": {
+                "minPeriod": "DD",
                 "parseDates": true,
-                "axisColor": "#DADADA",
-                "dashLength": 1,
+                "minorGridAlpha": 0.1,
                 "minorGridEnabled": true
             },
             "export": {
                 "enabled": false
-            }
+            },
+            "legend": {
+                "enabled": true,
+                "useGraphSettings": true
+            },
         });
 
         chart.addListener("rendered", zoomChart);
-        zoomChart();
+        if (chart.zoomChart) {
+            chart.zoomChart();
+        }
 
-        // this method is called when chart is first inited as we listen for "rendered" event
         function zoomChart() {
-            // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
-            chart.zoomToIndexes(chartData.length - 40, chartData.length - 1);
+            chart.zoomToIndexes(Math.round(chart.dataProvider.length * 0.4), Math.round(chart.dataProvider.length * 0.55));
         }
-
-        // generate some random data, quite different range
-
-        // generate some random data, quite different range
-        function generateChartData() {
-
-            return chartData = [
-                    @forEach ($sells as $key => $value)
-                {
-                    "date": "{{$key}}",
-                    "visits": "{{ $value }}"
-                },
-                @endforeach
-            ];
-
-
-        }
-
-        //            }, {
-        //                "date": "2013-01-28",
-        //                "value": 83
-        //            },
-        //        {
-        //                "date": "2013-01-29",
-        //                "value": 84
-        //            },
-        // {
-        //                "date": "2013-01-30",
-        //                "value": 81
-        //            }]
-        //        });
 
 
     </script>

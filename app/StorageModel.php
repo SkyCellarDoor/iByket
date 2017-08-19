@@ -24,4 +24,9 @@ class StorageModel extends Model
     {
         return $this->hasOne('App\StorageModel', 'id', 'storage_id');
     }
+
+    public function bills_model()
+    {
+        return $this->hasMany('App\BillModel', 'storage_id', 'id');
+    }
 }

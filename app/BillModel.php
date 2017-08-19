@@ -25,4 +25,45 @@ class BillModel extends Model
         return $query->where('storage_id', Auth::user()->storage_id)->get();
     }
 
+    public function SumBill()
+    {
+
+        $operations = CashRoutesModel::where('bill', $this->id)->get()->sum('value');
+        $spend = SpendModel::where('bill', $this->id)->get()->sum('value');
+        $move = MoveMoneyModel::where('bill', $this->id)->get()->sum('value');
+
+        $sum = $operations + $move + $spend;
+
+        return $sum;
+
+    }
+
+    public function SumBillShift()
+    {
+        $shift = ShiftModel::where('storage_id', $this->storage_id)->where('status', false)->first()->begin;
+
+        if ($this->default_storage == NULL) {
+
+            $operations = CashRoutesModel::where('created_at', '>=', $shift)->where('value', '>', 0)->where('bill', $this->id)->get()->sum('value');
+
+            $spend = SpendModel::where('created_at', '>=', $shift)->where('value', '>', 0)->where('bill', $this->id)->get()->sum('value');
+
+            $move = MoveMoneyModel::where('created_at', '>=', $shift)->where('value', '>', 0)->where('bill', $this->id)->get()->sum('value');
+
+            $sum = $operations + $move + $spend;
+        } else {
+
+            $operations = CashRoutesModel::where('bill', $this->id)->get()->sum('value');
+
+            $spend = SpendModel::where('bill', $this->id)->get()->sum('value');
+
+            $move = MoveMoneyModel::where('bill', $this->id)->get()->sum('value');
+
+            $sum = $operations + $move + $spend;
+        }
+
+        return number_format($sum, 2, '.', ',');
+
+    }
+
 }

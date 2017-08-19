@@ -2,13 +2,7 @@
 
 @section('page_css')
 
-    {{--<link href="{{ asset("assets/") }}/global/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />--}}
-    {{--<link href="{{ asset("assets/") }}/global/plugins/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css" />--}}
-    <link href="../assets/pages/css/profile-2.min.css" rel="stylesheet" type="text/css"/>
-    <link href="../assets/global/plugins/ladda/ladda-themeless.min.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-
+    <link href="{{ asset("semantic/") }}/css/cropper.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -157,7 +151,7 @@
                                 <div class="event">
                                     <div class="content">
                                         <div class="extra text">
-                                            ?
+
                                         </div>
                                     </div>
                                 </div>
@@ -175,9 +169,41 @@
                 </div>
             </div>
         </form>
+        <div>
+
+        </div>
     </div>
 
     <div class="ui bottom attached tab segment" data-tab="second">
+
+    </div>
+
+    {{--акции--}}
+
+    <div class="ui bottom attached tab segment" data-tab="promotions">
+        <div class="ui grid">
+            <div class="ui twelve wide column">
+                <div class="ui top attached tabular menu">
+                    <a class="active item" data-tab="active_promotion">Активные</a>
+                    <a class="item" data-tab="not_active_promotion">Не активные</a>
+                </div>
+                <div class="ui bottom attached active tab segment" data-tab="active_promotion">
+                    <table id="result_table" class="ui table compact celled segment">
+
+                    </table>
+                </div>
+                <div class="ui bottom attached tab segment" data-tab="not_active_promotion">Second</div>
+            </div>
+            <div class="ui four wide column">
+                <div class="ui segment">
+                    <input id="button_new_promotion" type="button" class="ui fluid green button" value="Новая акция">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ui bottom attached tab segment" data-tab="cargo">
         <div class="ui grid">
             <div class="ui twelve wide column">
                 <div id="loader" class="ui">
@@ -215,37 +241,8 @@
                     </table>
                 </div>
             </div>
-
-
         </div>
     </div>
-
-    {{--акции--}}
-
-    <div class="ui bottom attached tab segment" data-tab="promotions">
-        <div class="ui grid">
-            <div class="ui twelve wide column">
-                <div class="ui top attached tabular menu">
-                    <a class="active item" data-tab="active_promotion">Активные</a>
-                    <a class="item" data-tab="not_active_promotion">Не активные</a>
-                </div>
-                <div class="ui bottom attached active tab segment" data-tab="active_promotion">
-                    <table id="result_table" class="ui table compact celled segment">
-
-                    </table>
-                </div>
-                <div class="ui bottom attached tab segment" data-tab="not_active_promotion">Second</div>
-            </div>
-            <div class="ui four wide column">
-                <div class="ui segment">
-                    <input id="button_new_promotion" type="button" class="ui fluid green button" value="Новая акция">
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="ui bottom attached tab segment" data-tab="cargo">Third</div>
     <div class="ui bottom attached tab segment" data-tab="sells">
         <table class="ui table compact celled selectable segment ">
             <thead>
@@ -272,7 +269,10 @@
             </tbody>
         </table>
     </div>
-    <div class="ui bottom attached tab segment" data-tab="invoice">Third</div>
+    <div class="ui bottom attached tab segment" data-tab="invoice">
+
+
+    </div>
 
     {{--Модальные окна--}}
 
@@ -383,13 +383,14 @@
 
 
 @section('page_scripts')
-
-
+    <script src="{{ asset("/semantic/") }}/js/cropper.min.js" type="text/javascript"></script>
 @endsection
 
 
 @section('script')
     <script>
+
+
         $('.menu .item').tab();
 
         $('.dropdown').dropdown();

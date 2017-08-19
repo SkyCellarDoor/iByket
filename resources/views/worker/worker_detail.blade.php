@@ -183,28 +183,28 @@
             </tr>
             </thead>
             <tbody>
-            {{--@foreach($bills_operation->take(10) as $operation)--}}
-            {{--<tr>--}}
-            {{--<td>--}}
-            {{--{{ $operation->created_at }}--}}
-            {{--</td>--}}
-            {{--<td>--}}
-            {{--@if( $operation->storage_id == NULL )--}}
-            {{--<span style="font-style: italic;">{{ $operation->comments }}</span>--}}
-            {{--@else--}}
-            {{--<span>{{ $operation->comments }}</span>--}}
-            {{--@endif--}}
-            {{--</td>--}}
-            {{--<td>--}}
-            {{--@if( $operation->storage_id == NULL )--}}
-            {{--<span style="font-style: italic;">{{ $operation->value }}</span> p.--}}
-            {{--@else--}}
-            {{--<span><b>{{ $operation->value }}</b></span> p.--}}
-            {{--@endif--}}
+            @foreach($bills_operation as $operation)
+                <tr>
+                    <td>
+                        {{ $operation->created_at }}
+                    </td>
+                    <td>
+                        @if( $operation->storage_id == NULL )
+                            <span style="font-style: italic;">{{ $operation->comments }}</span>
+                        @else
+                            <span>{{ $operation->comments }}</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if( $operation->storage_id == NULL )
+                            <span style="font-style: italic;">{{ $operation->value }}</span> p.
+                        @else
+                            <span><b>{{ $operation->value }}</b></span> p.
+                        @endif
 
-            {{--</td>--}}
-            {{--</tr>--}}
-            {{--@endforeach--}}
+                    </td>
+                </tr>
+            @endforeach
 
 
             </tbody>

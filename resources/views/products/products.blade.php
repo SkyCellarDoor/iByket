@@ -78,9 +78,15 @@
                             <td><input name="id_product[]" type="checkbox" value="{{ $product->id }}"></td>
 
                             <td>
-                                <a href="{{ route('detail_products') }}/{{ $product->good_id }}">
+                                <a class="tovar" href="{{ route('detail_products') }}/{{ $product->good_id }}">
                                     <b>{{ $product->good_model->name }}</b>
                                 </a>
+                                <div class="ui popup top left transition">
+                                    <div class="ui one column center aligned grid">
+                                        <img width="300px" height="300px" class="ui image"
+                                             src="../storage/orders/101.jpg">
+                                    </div>
+                                </div>
                                 {{ $product->invoice_model->real_date }}
                             </td>
                             <td nowrap>
@@ -177,54 +183,11 @@
 
 @section('script')
     <script>
+
         $(document).ready(function () {
 
-//            $('.checkbox').checkbox({
-//                onChange: function () {
-//                    render_table();
-//                }
-//            });
-
-            {{--function render_table() {--}}
-
-            {{--var search = [];--}}
-
-            {{--if ($('.checkbox').checkbox('is checked')) {--}}
-            {{--search.mystorage = 1;--}}
-
-            {{--}--}}
-            {{--else {--}}
-            {{--search.mystorage = 0;--}}
-            {{--}--}}
-
-            {{--$.ajax({--}}
-            {{--url: "{{ route('list_products') }}",--}}
-            {{--type: 'POST',--}}
-            {{--data: {--}}
-            {{--mystorage: search.mystorage,--}}
-            {{--id: search.settings,--}}
-            {{--},--}}
-            {{--datatype: "json",--}}
-            {{--beforeSend: function () {--}}
-            {{--//console.log(search);--}}
-            {{--$('#dimmer').addClass('dimmer');--}}
-            {{--$('#loader').addClass('loader');--}}
-
-            {{--},--}}
-            {{--success: function (response) {--}}
-            {{--$('#result').html(response);--}}
-            {{--$('#dimmer').removeClass('dimmer');--}}
-            {{--$('#loader').removeClass('loader');--}}
-            {{--},--}}
-            {{--});--}}
-            {{--}--}}
-
-            {{--render_table();--}}
-
-
-            $(document).ready(function () {
-
                 $('#list_prod').DataTable({
+
                     "language": {
                         "info": "Старница _PAGE_ из _PAGES_",
                         "lengthMenu": "_MENU_  &nbsp;&nbsp;записей на страницу",
@@ -242,6 +205,9 @@
 
                 });
 
+            $('a.tovar').popup({
+                popup: true,
+                position: 'right center',
             });
 
             $('#set_cost').on('click', function () {

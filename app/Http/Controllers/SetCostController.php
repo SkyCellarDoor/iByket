@@ -202,6 +202,17 @@ class SetCostController extends Controller
 
     }
 
+    public function set_cost_array($id)
+    {
+
+        $products = ProductModel::where('invoice_id', $id)->get();
+
+        $back_url = 'invoice_list';
+
+        return view('price.set_price')->with(['products' => $products])->with('back_url', $back_url);
+
+    }
+
     public function set_cost_wholesale(Request $request)
     {
 

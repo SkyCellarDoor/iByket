@@ -164,6 +164,7 @@
                         <div class="extra content">
                         <span class="left floated calculator">
                           <i class="calculator icon"></i>
+
                         </span>
                             {{--<span class="right floated percent">--}}
                             {{--<span>5</span>--}}
@@ -174,6 +175,8 @@
                             <div class="field">
                                 <input class="ui button green right floated" type="submit" value="Создать">
                             </div>
+
+
     </form>
     </div>
     </div>
@@ -263,11 +266,8 @@
         });
 
         $('a').popup({
+            on: 'hover',
             position: 'top left',
-            delay: {
-                show: 300,
-                hide: 800
-            }
         });
 
         $('#delivery').checkbox({

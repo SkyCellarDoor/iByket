@@ -56,9 +56,11 @@ class GoodController extends Controller
         $product = Goods::with('main_cat', 'sub_cat')->find($id);
 
         $main_cat = CategoryGoodModel::all();
+
         $sub_cat = CategorySubGood::where('main_category', $product->category_id)->get();
 
         $product_count = $list_products->sum('amount');
+
 
         return view('products.product_detail')
             ->with(['sells'=> $sells])

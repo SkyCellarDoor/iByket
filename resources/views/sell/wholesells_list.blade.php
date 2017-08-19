@@ -11,7 +11,7 @@
 
 
     <div class="ui top attached menu">
-        <div class="item">&nbsp;Список оптовых продаж</div>
+        <div class="item">&nbsp;Список продаж</div>
     </div>
 
     <div class="ui bottom attached segment">
@@ -48,7 +48,7 @@
                         @if( $sell->client_id == NULL )
                             Без клиента
                         @else
-                            <a href="{{ route('opt_client_detail') }}/{{ $sell->client_id }}">{{ $sell->client_sell_model->wholesales_model->company }}</a>
+                            <a href="{{ route('detail_view') }}/{{ $sell->client_id }}">{{ $sell->client_sell_model->name }}</a>
                         @endif
                     </td>
                     <td>

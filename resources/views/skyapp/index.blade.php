@@ -97,7 +97,6 @@
                 </div>
                 <a class="item" href="{{ route('wholesale_product_list') }}">Склад</a>
                 <a class="item" href="{{ route('order_wholesale_list') }}">Заказы</a>
-                <a class="item" href="{{ route('income_move_product') }}">Входящие перемещения</a>
             </div>
         </div>
     </div>
@@ -209,6 +208,7 @@
         <a class="item" href="{{ route('opt_clients_list') }}">Оптовые клиенты</a>
         <a class="item" href="{{ route('wholesale_product_list') }}">Склад</a>
         <a class="item" href="{{ route('income_move_product') }}">Входящие перемещения</a>
+        <a class="item" href="{{ route('order_wholesale_list') }}">Заказы</a>
 
 
         <div class="right menu">

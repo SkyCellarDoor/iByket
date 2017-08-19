@@ -40,7 +40,7 @@
                         </thead>
                         <tbody>
                         @foreach($products as $product)
-                            @if($product->product_model->good_model->consist == 0)
+                            {{--@if($product->product_model->good_model->consist == 0)--}}
                                 <tr>
                                     <td>{{$product->product_model->good_model->name}}</td>
                                     <td>{{$product->amount}} {{$product->product_model->good_model->one_name_model->name_short}}
@@ -49,14 +49,14 @@
                                     <td>{{$product->price}} p.</td>
                                     <td>{{$product->amount * $product->price}} p.</td>
                                 </tr>
-                            @else
-                                <tr>
-                                    <td>{{$product->product_model->good_model->name}}</td>
-                                    <td>{{$product->amount_consist}} {{$product->product_model->good_model->many_name_model->name_short}}</td>
-                                    <td>{{$product->price}} p.</td>
-                                    <td>{{$product->amount_consist * $product->price}} p.</td>
-                                </tr>
-                            @endif
+                            {{--@else--}}
+                            {{--<tr>--}}
+                            {{--<td>{{$product->product_model->good_model->name}}</td>--}}
+                            {{--<td>{{$product->amount_consist}} {{$product->product_model->good_model->many_name_model->name_short}}</td>--}}
+                            {{--<td>{{$product->price}} p.</td>--}}
+                            {{--<td>{{$product->amount_consist * $product->price}} p.</td>--}}
+                            {{--</tr>--}}
+                            {{--@endif--}}
                         @endforeach
 
                         </tbody>
@@ -120,7 +120,7 @@
                             </div>
                             <div class="event">
                                 <div class="content">
-                                    Сотрудник: <b>{{ $sell->user_id }}</b>
+                                    Сотрудник: <b>{{ $sell->worker_model->name }}</b>
                                 </div>
                             </div>
                         </div>

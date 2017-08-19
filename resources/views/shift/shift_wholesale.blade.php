@@ -105,13 +105,16 @@
                             <td class="negative">
                                 Нет прав на просмотр
                             </td>
+                        @elseif($operation->client_cash_model->company_id == NULL)
+                            <td class="text-center" style="vertical-align:middle">
+                                {{ $operation->client_cash_model->name }}
+                            </td>
+                            <td>
+                                {{ $operation->comments }}
+                            </td>
                         @else
                             <td class="text-center" style="vertical-align:middle">
-                                @if($operation->client_cash_model == NULL)
-                                    Без клиента
-                                @else
-                                    <a href="{{ route('opt_client_detail') }}/{{ $operation->client_id }}">{{ $operation->client_cash_model->wholesales_model->company }}</a>
-                                @endif
+                                <a href="{{ route('opt_client_detail') }}/{{ $operation->client_id }}">{{ $operation->client_cash_model->wholesales_model->company }}</a>
                             </td>
                             <td>
                                 {{ $operation->comments }}

@@ -11,10 +11,12 @@
 
     <div class="ui top attached menu">
         @if ($opt_client->providers_model->type == 1)
-            <div class="item">ИП "<b>{{ $opt_client->providers_model->company }}</b>"</div>
+            <div class="item">ИП "<b><span id="name_company">{{ $opt_client->providers_model->company }}</span></b>"
+            </div>
 
         @else
-            <div class="item">ООО "<b>{{ $opt_client->providers_model->company }}</b>"</div>
+            <div class="item">ООО "<b><span id="name_company">{{ $opt_client->providers_model->company }}</span></b>"
+            </div>
 
         @endif
         <a class="item" href="{{ route('wholesale_sell') }}/{{ $opt_client->id }}"><i class="plus green icon"></i>Новая
@@ -63,97 +65,206 @@
         <div class="ui grid">
             <div class="twelve wide column">
                 <div id="tabs" class="ui top attached tabular menu">
-                    <a class="item active " data-tab="main">Основное</a>
+                    <a class="item active" data-tab="main">Основное</a>
+                    <a class="item" data-tab="req">Реквизиты</a>
+                    <a class="item" data-tab="additional">Дополнительно</a>
                     <a class="item" data-tab="buy">Покупки</a>
                     <a class="item" data-tab="order">Заказы</a>
                     <a class="item" data-tab="contacts">Контакты</a>
                 </div>
-
                 <div class="ui bottom attached tab segment active" data-tab="main">
-                    <table id="buy" class="ui compact green selectable celled table">
-                        <thead>
-                        <tr>
-                            <th colspan="3">Последние 5 заказов</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{--@foreach($orders->take(5) as $order)--}}
-                        {{--<tr>--}}
-                        {{--<td class="collapsing">--}}
-                        {{--<a href="{{ route('order_detail') }}/{{$order->id}}">{{$order->id}}</a>--}}
-                        {{--</td>--}}
-                        {{--<td>--}}
-                        {{--{{ $order->created_at }}--}}
-                        {{--</td>--}}
-                        {{--<td>--}}
-                        {{--{{ $order->status_history_model->status_name_model->name }}--}}
-                        {{--</td>--}}
+                    <div class="ui form">
+                        <div class="field">
+                            <label>Комментарий</label>
+                            <textarea></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui bottom attached tab segment" data-tab="req">
+                    <div class="ui segments">
+                        <div class="ui segment">
+                            <p><b>Реквизиты:</b></p>
+                            <table class="ui compact fluid table">
+                                <tbody>
+                                <tr>
+                                    <td><p>ИНН</p></td>
+                                    <td>2461035440</td>
+                                </tr>
+                                <tr>
+                                    <td><p>КПП</p></td>
+                                    <td>246101001</td>
+                                </tr>
+                                <tr>
+                                    <td><p>ОГРН</p></td>
+                                    <td>1172468002728</td>
+                                </tr>
+                                <tr>
+                                    <td><p>ОКПО</p></td>
+                                    <td>06297426</td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><p>Юридический адрес</p></td>
+                                    <td>660050, г. Красноярск, ул. Грунтовая, д. 17, оф. 26</td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><p>Фактический адрес</p></td>
+                                    <td>660050, г. Красноярск, ул. Грунтовая, д. 17, оф. 26</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="ui segment">
+                            <label><b>Банковский счет:</b></label>
+                            <table class="ui compact fluid table">
+                                <tbody>
+                                <tr>
+                                    <td><p>Расчётный счёт</p></td>
+                                    <td><span>40702810506500000443</span></td>
+                                </tr>
+                                <tr>
+                                    <td><p>Корреспондентский</p></td>
+                                    <td><span>30101810845250000999</span></td>
+                                </tr>
+                                <tr>
+                                    <td><p>БИК</p></td>
+                                    <td><span>044525999</span></td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><p>Наименование банка</p></td>
+                                    <td>
+                                        ТОЧКА ПАО БАНКА "ФК ОТКРЫТИЕ" Адрес банка 117216, Москва, ул.
+                                        Старокачаловская 1, корпус 2
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui attached tab segment" data-tab="additional">
+                    <form id="data" method="post" action="{{ route('update_opt_client') }}">
+                        {{ csrf_field() }}
+                        <input name="id" type="hidden" value="{{ $opt_client->id }}"/>
+                        <div class="ui grid">
+                            <div class="ui sixteen wide column">
+                                <div id="dimmer" class="ui error form">
+                                    <div class="ui inverted dimmer">
+                                        <div class="content">
+                                            <div class="center">
+                                                <h2 class="ui icon header"><i class="checkmark icon"></i> Сохраненно
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                        {{--</tr>--}}
-                        {{--@endforeach--}}
-                        </tbody>
-                    </table>
+                                    <div class="three fields">
+                                        <div class="field">
+                                            <label>Название компании</label>
+                                            <input id="current_name_company" name="name_company"
+                                                   value="{{ $opt_client->providers_model->company }}">
+                                        </div>
+                                    </div>
+                                    <div class="two fields">
+                                        <div class="field twelve wide column">
+                                            <label>Имя фамилия</label>
+                                            <input id="name_main_contact" name="main_contact_name"
+                                                   value="{{ $opt_client->name }}">
+                                        </div>
+                                        <div class="field four wide column">
+                                            <label>Номер телефона</label>
+                                            <div class="ui labeled input">
+                                                <label class="ui label">+</label>
+                                                <input id="phone_main_contact" name="main_contact_phone"
+                                                       value="{{ $opt_client->phone2 }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input id="update_company" type="submit" class="ui button right floated" style=""
+                                       value="Сохранить">
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
                 <div class="ui bottom attached tab segment" data-tab="buy">
                     <table id="buy" class="ui compact green selectable celled table">
-                        <thead>
-                        <tr>
-                            <th colspan="3">Покупки</th>
-                        </tr>
-                        </thead>
                         <tbody>
-                        {{--@foreach($orders->take(5) as $order)--}}
-                        {{--<tr>--}}
-                        {{--<td class="collapsing">--}}
-                        {{--<a href="{{ route('order_detail') }}/{{$order->id}}">{{$order->id}}</a>--}}
-                        {{--</td>--}}
-                        {{--<td>--}}
-                        {{--{{ $order->created_at }}--}}
-                        {{--</td>--}}
-                        {{--<td>--}}
-                        {{--{{ $order->status_history_model->status_name_model->name }}--}}
-                        {{--</td>--}}
-
-                        {{--</tr>--}}
-                        {{--@endforeach--}}
+                        @foreach($sells->take(5) as $sell)
+                        <tr>
+                            <td class="collapsing">
+                                <a href="{{ route('wholesale_sell_detail') }}/{{$sell->id}}">{{$sell->id}}</a>
+                            </td>
+                            <td>
+                                {{ $sell->created_at }}
+                            </td>
+                            <td class="collapsing">
+                                {{ $sell->summa }} p.
+                            </td>
+                        </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
                 <div class="ui bottom attached tab segment" data-tab="order">
                     <table id="buy" class="ui compact green selectable celled table">
-                        <thead>
-                        <tr>
-                            <th colspan="3">Заказы</th>
-                        </tr>
-                        </thead>
                         <tbody>
-                        {{--@foreach($orders->take(5) as $order)--}}
-                        {{--<tr>--}}
-                        {{--<td class="collapsing">--}}
-                        {{--<a href="{{ route('order_detail') }}/{{$order->id}}">{{$order->id}}</a>--}}
-                        {{--</td>--}}
-                        {{--<td>--}}
-                        {{--{{ $order->created_at }}--}}
-                        {{--</td>--}}
-                        {{--<td>--}}
-                        {{--{{ $order->status_history_model->status_name_model->name }}--}}
-                        {{--</td>--}}
-
-                        {{--</tr>--}}
-                        {{--@endforeach--}}
+                        @foreach($orders->take(5) as $order)
+                            <tr>
+                                <td class="collapsing">
+                                    <a href="{{ route('order_detail') }}/{{$order->id}}">{{$order->id}}</a>
+                                </td>
+                                <td>
+                                    {{ $order->date_income }}
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
                 <div class="ui bottom attached tab segment" data-tab="contacts">
-                    4
+                    <div class="ui segment">
+                        <a href="#"><i id="add_address" class="plus icon"></i></a><b>Адреса:</b>
+                        <table class="ui compact fluid table">
+                            <tbody>
+                            @foreach( $addresses as $address )
+                                <tr>
+                                    <td><p>{{ $address->address }}</p></td>
+                                    <td class="collapsing"><i class="cancel icon"></i></td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        <a href="#"><i id="add_contact" class="plus icon"></i></a><b>Контакты:</b>
+                        <table class="ui compact fluid table">
+                            <tbody>
+                            @foreach( $contacts as $contact )
+                                <tr>
+                                    <td>{{ $contact->name }}</td>
+                                    <td>+7 {{ $contact->phone }}</td>
+                                    <td class="collapsing"><i class="cancel icon"></i></td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="four wide column">
                 <div class="ui card" style="width: 100%">
                     <div class="content">
                         <div class="meta">
+                            Основной контакт:
+                        </div>
+                        <div class="description">
+                            <span id="name_main_contact_text">{{ $opt_client->name }}</span> | <span
+                                    id="phone_main_contact_text"> {{ $opt_client->phone }}</span>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="meta">
                             Адреса:
-                            <span class="right floated"><a><i id="add_address" class="plus icon"></i></a></span>
+                            {{--<span class="right floated"><a><i id="add_address" class="plus icon"></i></a></span>--}}
 
                         </div>
                         @foreach( $addresses as $address )
@@ -165,7 +276,7 @@
                     <div class="content">
                         <div class="meta">
                             Контакты:
-                            <span class="right floated"><a id="add_contact"><i class="plus icon"></i></a></span>
+                            {{--<span class="right floated"><a id="add_contact"><i class="plus icon"></i></a></span>--}}
                         </div>
                         @foreach( $contacts as $contact )
                             <div class="description">
@@ -176,7 +287,7 @@
                     <div class="extra content">
                         <a>
                             <i class="calculator icon"></i>
-                            13000 р.
+                            {{ $sells_sum }} р.
                         </a>
                     </div>
                 </div>
@@ -334,7 +445,35 @@
 
 @section('script')
     <script>
+        $('#phone_main_contact').mask('0 (000) 000-00-00', {placeholder: "0 (000) 000-00-00"});
 
+        $('#update_company').click(function (e) {
+            e.preventDefault();
+
+            var formdata = $("#data").serialize();
+
+            $.ajax({
+                url: "{{ route('update_opt_client') }}",
+                type: 'POST',
+                data: formdata,
+                beforeSend: function () {
+
+                    $("#update_company").addClass('loading');
+                    $('#dimmer').dimmer('show');
+                },
+                success: function () {
+                    $("#name_company").text($("#current_name_company").val());
+                    $("#phone_main_contact_text").text("+" + $("#phone_main_contact").val());
+                    $("#name_main_contact_text").text($("#name_main_contact").val());
+//                    $("#name_product_card").text($("#current_name").val());
+                    setTimeout(function () {
+                        $("#update_company").removeClass('loading');
+                        $('#dimmer').dimmer('hide');
+                    }, 1000);
+
+                },
+            });
+        });
 
         $('#new_order').on('click', function () {
 

@@ -79,6 +79,13 @@ class ClientModel extends Model
             substr($value, 4, 3) . "-" .
             substr($value, 7, 2) . "-" .
             substr($value, 9, 2);
+
+    }
+
+    public function getPhone2Attribute($value)
+    {
+        return $this->attributes['phone'];
+
     }
 
 

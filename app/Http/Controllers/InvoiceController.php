@@ -13,6 +13,7 @@ use App\m_invoices_list;
 use App\ProductModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class InvoiceController extends Controller
 {
@@ -179,7 +180,7 @@ class InvoiceController extends Controller
             $money->save();
         }
 
-        return redirect()->route('invoice_list');
+        return redirect()->route('set_cost_array', ['id' => $request->invoice_id]);
     }
 
 }

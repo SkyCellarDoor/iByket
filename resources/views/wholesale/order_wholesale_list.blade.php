@@ -26,7 +26,7 @@
         @foreach($orders as $order)
             <div class="ui top attached grey inverted menu">
                 <div class="item">
-                    {{ $order -> client_opt_id }}
+                    {{ $order -> orders_user_model->wholesales_model->company }}
                 </div>
                 <div class="right item">
                     {{ $order -> date_income }}
